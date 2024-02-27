@@ -20,5 +20,11 @@ from polls import views
 
 urlpatterns = [
     path('hotel/', views.hotel_list_view),
+    path('hotel/create/', views.hotel_create_view),
     path('hotel/<int:pk>/', views.hotel_detail_view),
+    path('hotel/<int:pk>/edit/', views.hotel_edit_view),
+    path('hotel/<int:pk>/delete/', views.hotel_delete_view),
+
+    path('register/'),
+    path('login/'),
 ]

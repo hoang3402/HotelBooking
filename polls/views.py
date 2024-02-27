@@ -18,3 +18,27 @@ class HotelDetailViewSet(generics.RetrieveAPIView):
 
 
 hotel_detail_view = HotelDetailViewSet.as_view()
+
+
+class HotelCreateViewSet(generics.CreateAPIView):
+    queryset = Hotel.objects.all()
+    serializer_class = HotelSerializer
+
+
+hotel_create_view = HotelCreateViewSet.as_view()
+
+
+class HotelEditViewSet(generics.UpdateAPIView):
+    queryset = Hotel.objects.all()
+    serializer_class = HotelSerializer
+
+
+hotel_edit_view = HotelEditViewSet.as_view()
+
+
+class HotelDeleteViewSet(generics.DestroyAPIView):
+    queryset = Hotel.objects.all()
+    serializer_class = HotelSerializer
+
+
+hotel_delete_view = HotelDeleteViewSet.as_view()
