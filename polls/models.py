@@ -1,4 +1,5 @@
 from django.contrib.auth.base_user import AbstractBaseUser, BaseUserManager
+from django.contrib.auth.models import PermissionsMixin
 from django.db import models
 
 
@@ -41,35 +42,61 @@ class Room(models.Model):
         return f'{self.id} - {self.name} - {self.room_type} - {self.hotel.name}'
 
 
+# Create your CustomUserManager here.
 class CustomUserManager(BaseUserManager):
-    def create_user(self, email, password=None, **extra_fields):
+    def _create_user(self, email, password, first_name, last_name, mobile, **extra_fields):
         if not email:
-            raise ValueError('The Email field must be set')
-        email = self.normalize_email(email)
-        user = self.model(email=email, **extra_fields)
+            raise ValueError("Email must be provided")
+        if not password:
+            raise ValueError('Password is not provided')
+
+        user = self.model(
+            email=self.normalize_email(email),
+            first_name=first_name,
+            last_name=last_name,
+            mobile=mobile,
+            **extra_fields
+        )
+
         user.set_password(password)
         user.save(using=self._db)
         return user
 
-    def create_superuser(self, email, password=None, **extra_fields):
-        user = self.create_user(email, password, **extra_fields)
-        user.is_admin = True
-        user.is_staff = True
-        user.save(using=self._db)
-        return user
+    def create_user(self, email, password, first_name, last_name, mobile, **extra_fields):
+        extra_fields.setdefault('is_staff', True)
+        extra_fields.setdefault('is_active', True)
+        extra_fields.setdefault('is_superuser', False)
+        return self._create_user(email, password, first_name, last_name, mobile, password, **extra_fields)
+
+    def create_superuser(self, email, password, first_name, last_name, mobile, **extra_fields):
+        extra_fields.setdefault('is_staff', True)
+        extra_fields.setdefault('is_active', True)
+        extra_fields.setdefault('is_superuser', True)
+        return self._create_user(email, password, first_name, last_name, mobile, **extra_fields)
 
 
-class User(AbstractBaseUser):
-    id = models.AutoField(primary_key=True)
-    name = models.CharField(max_length=255)
-    email = models.EmailField()
-    password = models.CharField(max_length=255)
-    phone_number = models.CharField(max_length=20)
+# Create your User Model here.
+class User(AbstractBaseUser, PermissionsMixin):
+    # Abstractbaseuser has password, last_login, is_active by default
+
+    email = models.EmailField(db_index=True, unique=True, max_length=254)
+    first_name = models.CharField(max_length=240)
+    last_name = models.CharField(max_length=255)
+    number_phone = models.CharField(max_length=50)
+    address = models.CharField(max_length=250)
+
+    is_staff = models.BooleanField(default=True)  # must needed, otherwise you won't be able to loginto django-admin.
+    is_active = models.BooleanField(default=True)  # must needed, otherwise you won't be able to loginto django-admin.
+    is_superuser = models.BooleanField(default=False)  # this field we inherit from PermissionsMixin.
 
     objects = CustomUserManager()
 
-    def __str__(self):
-        return f'{self.id} - {self.name}'
+    USERNAME_FIELD = 'email'
+    REQUIRED_FIELDS = ['first_name', 'last_name', 'number_phone']
+
+    class Meta:
+        verbose_name = 'User'
+        verbose_name_plural = 'Users'
 
 
 class Booking(models.Model):

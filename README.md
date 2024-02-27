@@ -58,3 +58,11 @@ command make requirements
 ```shell
 pip freeze > requirements.txt
 ```
+
+```shell
+py manage.py makemigrations
+```
+
+```shell
+py manage.py migrate
+```

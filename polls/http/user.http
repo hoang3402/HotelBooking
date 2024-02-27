@@ -3,11 +3,33 @@ Content-Type: application/json
 Vary: Accept
 
 {
-    "id": 1,
-    "name": "abc",
-    "email": "abc@gmail.com",
-    "password": "123456789",
-    "phone_number": "123456789"
+  "id": 1,
+  "name": "abc",
+  "email": "abc@gmail.com",
+  "password": "123456789",
+  "phone_number": "123456789"
+}
+
+###
+
+
+POST http://localhost:8000/api/login/
+Content-Type: application/json
+Vary: Accept
+
+{
+  "username": "admin",
+  "password": "123456789"
+}
+
+###
+POST http://localhost:8000/api/login/
+Content-Type: application/json
+Vary: Accept
+
+{
+  "username": "hoang3409",
+  "password": "123456789"
 }
 
 ###
