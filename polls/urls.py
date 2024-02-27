@@ -19,5 +19,6 @@ from django.urls import path
 from polls import views
 
 urlpatterns = [
-    path('', views.index),
+    path('hotel/', views.HotelViewSet.as_view({'get': 'list'})),
+    path('hotel/<int:pk>/', views.HotelDetailViewSet.as_view()),
 ]
