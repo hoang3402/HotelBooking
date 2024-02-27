@@ -19,7 +19,7 @@ class Hotel(models.Model):
 
 
 class Room(models.Model):
-    id = models.IntegerField(primary_key=True)
+    id = models.AutoField(primary_key=True)
     name = models.CharField(max_length=255)
     room_type = models.CharField(max_length=255)
     description = models.TextField()
@@ -34,7 +34,7 @@ class Room(models.Model):
 
 
 class User(models.Model):
-    id = models.IntegerField(primary_key=True)
+    id = models.AutoField(primary_key=True)
     name = models.CharField(max_length=255)
     email = models.EmailField()
     password = models.CharField(max_length=255)
@@ -45,7 +45,7 @@ class User(models.Model):
 
 
 class Booking(models.Model):
-    id = models.IntegerField(primary_key=True)
+    id = models.AutoField(primary_key=True)
     check_in_date = models.DateField()
     check_out_date = models.DateField()
     number_of_people = models.IntegerField()
@@ -62,7 +62,7 @@ class Booking(models.Model):
 
 
 class Review(models.Model):
-    id = models.IntegerField(primary_key=True)
+    id = models.AutoField(primary_key=True)
     rating = models.DecimalField(max_digits=2, decimal_places=2)
     title = models.CharField(max_length=255)
     comment = models.TextField()
