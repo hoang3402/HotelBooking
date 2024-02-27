@@ -1,7 +1,8 @@
 from rest_framework import generics
+from rest_framework.authentication import SessionAuthentication, BasicAuthentication
 
-from polls.models import Hotel
-from polls.serializers import HotelSerializer
+from polls.models import Hotel, User
+from polls.serializers import HotelSerializer, UserSerializer
 
 
 class HotelViewSet(generics.ListAPIView):
@@ -42,3 +43,13 @@ class HotelDeleteViewSet(generics.DestroyAPIView):
 
 
 hotel_delete_view = HotelDeleteViewSet.as_view()
+
+
+class UserCreateViewSet(generics.CreateAPIView):
+    authentication_classes = [SessionAuthentication, BasicAuthentication]
+
+    queryset = User.objects.all()
+    serializer_class = UserSerializer
+
+
+user_create_view = UserCreateViewSet.as_view()

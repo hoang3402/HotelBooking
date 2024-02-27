@@ -25,6 +25,6 @@ urlpatterns = [
     path('hotel/<int:pk>/edit/', views.hotel_edit_view),
     path('hotel/<int:pk>/delete/', views.hotel_delete_view),
 
-    path('register/'),
-    path('login/'),
+    path('register/', views.user_create_view),
+    # path('login/'),
 ]

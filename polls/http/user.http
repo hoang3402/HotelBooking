@@ -1,0 +1,13 @@
+POST http://localhost:8000/api/register/
+Content-Type: application/json
+Vary: Accept
+
+{
+    "id": 1,
+    "name": "abc",
+    "email": "abc@gmail.com",
+    "password": "123456789",
+    "phone_number": "123456789"
+}
+
+###
