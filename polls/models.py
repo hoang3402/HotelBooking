@@ -12,7 +12,7 @@ class Hotel(models.Model):
     phone_number = models.CharField(max_length=20)
     average_rating = models.FloatField()
     email = models.EmailField()
-    image = models.ImageField()
+    image = models.CharField(max_length=255)
 
     def __str__(self):
         return f'{self.id} - {self.name}'
@@ -25,7 +25,7 @@ class Room(models.Model):
     description = models.TextField()
     maximum_occupancy = models.IntegerField()
     price = models.DecimalField(max_digits=102, decimal_places=2)
-    image = models.TextField()
+    image = models.CharField(max_length=255)
 
     hotel = models.ForeignKey(Hotel, on_delete=models.CASCADE)
 
