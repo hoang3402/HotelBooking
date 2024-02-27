@@ -44,7 +44,7 @@ class Room(models.Model):
 
 # Create your CustomUserManager here.
 class CustomUserManager(BaseUserManager):
-    def _create_user(self, email, password, first_name, last_name, mobile, **extra_fields):
+    def _create_user(self, email, password, first_name, last_name, number_phone, **extra_fields):
         if not email:
             raise ValueError("Email must be provided")
         if not password:
@@ -54,7 +54,7 @@ class CustomUserManager(BaseUserManager):
             email=self.normalize_email(email),
             first_name=first_name,
             last_name=last_name,
-            mobile=mobile,
+            number_phone=number_phone,
             **extra_fields
         )
 
@@ -62,17 +62,17 @@ class CustomUserManager(BaseUserManager):
         user.save(using=self._db)
         return user
 
-    def create_user(self, email, password, first_name, last_name, mobile, **extra_fields):
+    def create_user(self, email, password, first_name, last_name, number_phone, **extra_fields):
         extra_fields.setdefault('is_staff', True)
         extra_fields.setdefault('is_active', True)
         extra_fields.setdefault('is_superuser', False)
-        return self._create_user(email, password, first_name, last_name, mobile, password, **extra_fields)
+        return self._create_user(email, password, first_name, last_name, number_phone, **extra_fields)
 
-    def create_superuser(self, email, password, first_name, last_name, mobile, **extra_fields):
+    def create_superuser(self, email, password, first_name, last_name, number_phone, **extra_fields):
         extra_fields.setdefault('is_staff', True)
         extra_fields.setdefault('is_active', True)
         extra_fields.setdefault('is_superuser', True)
-        return self._create_user(email, password, first_name, last_name, mobile, **extra_fields)
+        return self._create_user(email, password, first_name, last_name, number_phone, **extra_fields)
 
 
 # Create your User Model here.
@@ -83,7 +83,6 @@ class User(AbstractBaseUser, PermissionsMixin):
     first_name = models.CharField(max_length=240)
     last_name = models.CharField(max_length=255)
     number_phone = models.CharField(max_length=50)
-    address = models.CharField(max_length=250)
 
     is_staff = models.BooleanField(default=True)  # must needed, otherwise you won't be able to loginto django-admin.
     is_active = models.BooleanField(default=True)  # must needed, otherwise you won't be able to loginto django-admin.

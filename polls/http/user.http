@@ -4,10 +4,11 @@ Vary: Accept
 
 {
   "id": 1,
-  "name": "abc",
+  "first_name": "abc",
+  "last_name": "def",
   "email": "abc@gmail.com",
   "password": "123456789",
-  "phone_number": "123456789"
+  "number_phone": "123456789"
 }
 
 ###
@@ -18,17 +19,7 @@ Content-Type: application/json
 Vary: Accept
 
 {
-  "username": "admin",
-  "password": "123456789"
-}
-
-###
-POST http://localhost:8000/api/login/
-Content-Type: application/json
-Vary: Accept
-
-{
-  "username": "hoang3409",
+  "username": "abc@gmail.com",
   "password": "123456789"
 }
 
