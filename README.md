@@ -50,3 +50,11 @@
 
 # Setup docker
 
+---
+
+## python
+
+command make requirements
+```shell
+pip freeze > requirements.txt
+```
