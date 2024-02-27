@@ -1,4 +1,4 @@
-from polls.models import Booking, Hotel, Review, Room, User
+from polls.models import Booking, Hotel, Review, Room, User, RoomType
 
 from django.contrib import admin
 
@@ -25,4 +25,9 @@ class RoomAdmin(admin.ModelAdmin):
 
 @admin.register(User)
 class UserAdmin(admin.ModelAdmin):
+    pass
+
+
+@admin.register(RoomType)
+class RoomTypeAdmin(admin.ModelAdmin):
     pass

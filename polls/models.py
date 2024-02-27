@@ -5,12 +5,11 @@ class Hotel(models.Model):
     id = models.AutoField(primary_key=True)
     name = models.CharField(max_length=255)
     address = models.CharField(max_length=255)
-    description = models.TextField()
+    description = models.TextField(null=True)
     city = models.CharField(max_length=255)
     country = models.CharField(max_length=255)
-    postal_code = models.CharField(max_length=255)
     phone_number = models.CharField(max_length=20)
-    average_rating = models.FloatField()
+    average_rating = models.FloatField(default=0)
     email = models.EmailField()
     image = models.CharField(max_length=255)
 
@@ -18,19 +17,27 @@ class Hotel(models.Model):
         return f'{self.id} - {self.name}'
 
 
+class RoomType(models.Model):
+    id = models.AutoField(primary_key=True)
+    name = models.CharField(max_length=255)
+
+    def __str__(self):
+        return self.name
+
+
 class Room(models.Model):
     id = models.AutoField(primary_key=True)
     name = models.CharField(max_length=255)
-    room_type = models.CharField(max_length=255)
-    description = models.TextField()
-    maximum_occupancy = models.IntegerField()
+    description = models.TextField(null=True)
+    maximum_occupancy = models.IntegerField(default=1)
     price = models.DecimalField(max_digits=102, decimal_places=2)
     image = models.CharField(max_length=255)
 
     hotel = models.ForeignKey(Hotel, on_delete=models.CASCADE)
+    room_type = models.ForeignKey(RoomType, on_delete=models.CASCADE)
 
     def __str__(self):
-        return f'{self.id} - {self.name}'
+        return f'{self.id} - {self.name} - {self.room_type} - {self.hotel.name}'
 
 
 class User(models.Model):
@@ -45,6 +52,13 @@ class User(models.Model):
 
 
 class Booking(models.Model):
+    type_status = {
+        ('Pending', 'Pending'),
+        ('Confirmed', 'Confirmed'),
+        ('Cancelled', 'Cancelled'),
+        ('Completed', 'Completed'),
+    }
+
     id = models.AutoField(primary_key=True)
     check_in_date = models.DateField()
     check_out_date = models.DateField()
@@ -52,6 +66,7 @@ class Booking(models.Model):
     total_price = models.DecimalField(max_digits=102, decimal_places=2)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+    status = models.CharField(choices=type_status, default='Pending')
 
     room = models.ForeignKey(Room, on_delete=models.CASCADE)
     hotel = models.ForeignKey(Hotel, on_delete=models.CASCADE)
