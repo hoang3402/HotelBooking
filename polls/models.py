@@ -75,7 +75,6 @@ class CustomUserManager(BaseUserManager):
         return self._create_user(email, password, first_name, last_name, number_phone, **extra_fields)
 
 
-# Create your User Model here.
 class User(AbstractBaseUser, PermissionsMixin):
     # Abstractbaseuser has password, last_login, is_active by default
 
@@ -84,8 +83,9 @@ class User(AbstractBaseUser, PermissionsMixin):
     last_name = models.CharField(max_length=255)
     number_phone = models.CharField(max_length=50)
 
-    is_staff = models.BooleanField(default=True)  # must needed, otherwise you won't be able to loginto django-admin.
-    is_active = models.BooleanField(default=True)  # must needed, otherwise you won't be able to loginto django-admin.
+    # is_staff and is_active must be needed, otherwise you won't be able to log in django-admin.
+    is_staff = models.BooleanField(default=True)
+    is_active = models.BooleanField(default=True)
     is_superuser = models.BooleanField(default=False)  # this field we inherit from PermissionsMixin.
 
     objects = CustomUserManager()
