@@ -20,15 +20,21 @@ from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 from polls import views
 
 urlpatterns = [
-    path('hotel/', views.hotel_list_view),
-    path('hotel/create/', views.hotel_create_view),
-    path('hotel/<int:pk>/', views.hotel_detail_view),
-    path('hotel/<int:pk>/edit/', views.hotel_edit_view),
-    path('hotel/<int:pk>/delete/', views.hotel_delete_view),
+    # Hotels
+    path('hotel/', views.hotel_list_view, name='hotels'),
+    path('hotel/create/', views.hotel_create_view, name='create_hotel'),
+    path('hotel/<int:pk>/', views.hotel_detail_view, name='detail_hotel'),
+    path('hotel/<int:pk>/edit/', views.hotel_edit_view, name='edit_hotel'),
+    path('hotel/<int:pk>/delete/', views.hotel_delete_view, name='delete_hotel'),
 
+    # Booking
+
+    # Reviews
+
+    # Authentication
     path('register/', views.user_create_view, name='register'),
     path('login/', TokenObtainPairView.as_view(), name='login'),
     path('token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
     path('token/verify/', TokenVerifyView.as_view(), name='token_verify'),
-    path('token/test/', views.test_token, name='test_token'),
+    path('token/test/', views.test_token, name='token_test'),
 ]

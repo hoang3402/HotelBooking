@@ -10,6 +10,8 @@ from polls.models import Hotel, User
 from polls.serializers import HotelSerializer, UserSerializer
 
 
+# Hotels
+
 class HotelViewSet(generics.ListAPIView):
     queryset = Hotel.objects.all()
     serializer_class = HotelSerializer
@@ -50,6 +52,9 @@ class HotelDeleteViewSet(generics.DestroyAPIView):
 hotel_delete_view = HotelDeleteViewSet.as_view()
 
 
+# End Hotels
+# Authentication
+
 class UserCreateViewSet(generics.CreateAPIView):
     permission_classes = [AllowAny]
     queryset = User.objects.all()
@@ -83,3 +88,5 @@ class TestViewAPI(APIView):
 
 
 test_token = TestViewAPI.as_view()
+
+# End Authentication
