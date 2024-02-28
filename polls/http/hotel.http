@@ -3,8 +3,16 @@ Accept: application/json
 
 ###
 
-
 GET http://localhost:8000/api/hotel/1
 Accept: application/json
+
+###
+
+GET http://localhost:8000/api/hotel/create
+Accept: application/json
+
+{
+
+}
 
 ###
