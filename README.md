@@ -1,7 +1,7 @@
 # các chức năng:
 
 - **Chức năng của Người dùng**:
-    - [ ] Tạo tài khoản (tên, số điện thoại, và email)
+    - [x] Tạo tài khoản (tên, số điện thoại, và email)
     - [ ] Xem danh sách khách sạn
         - Có nhiều khách sạn trong hệ thống
         - Thông tin cơ bản về từng khách sạn, bao gồm tên, địa chỉ và giá cả theo loại phòng
