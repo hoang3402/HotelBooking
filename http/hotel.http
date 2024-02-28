@@ -1,0 +1,27 @@
+GET http://localhost:8000/api/hotel/
+Accept: application/json
+
+###
+
+GET http://localhost:8000/api/hotel/1
+Accept: application/json
+
+###
+
+POST http://localhost:8000/api/hotel/create/
+Accept: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzA5MTA3MzY1LCJpYXQiOjE3MDkxMDcwNjUsImp0aSI6IjY3ZTg2ODNlNWU1YzQxOWY4YzljZGI5OTVkZThhZjU3IiwidXNlcl9pZCI6Mn0.W_ykvOu74Jaa46LAIFKX-uuJaBSeOxO_g5jibWtnzxI
+
+{
+  "name": "Nhà gỗ chalet toàn bộ nhà trong một ngôi nhà nghỉ dưỡng yên tĩnh Miso.Vị trí tốt. Cho phép mang theo thú cưng.",
+  "address": "Hakuba, Kitaazumi District, Nhật Bản",
+  "description": "Toàn bộ nhà gỗ chalet trong rừng trong khu vực Miso, gần Ehorland nổi tiếng. Một kỳ nghỉ hè thân thiện với thú cưng.Nó giống như một nơi ẩn náu trong rừng, nơi bạn hoàn toàn có thể cảm nhận được một bốn mùa sang trọng. Nội thất có một LDK lớn và 3 phòng ngủ với rất nhiều sự cởi mở. Ngoài ra, bạn có thể tận hưởng bốn mùa trong rừng trong khi thư giãn trong bồn tắm lớn và cửa sổ lớn. Vào mùa hè, vì nó nằm trong rừng, nó yên tĩnh và nội thất rất mát mẻ. Từ tất cả các phòng, bạn có thể cảm nhận được âm thanh của tiếng chim hót, ve sầu và âm thanh của gió.Mở cửa sổ và cố gắng hít thở sâu. Bạn nghĩ sao về việc thưởng thức bữa sáng, BBQ, v.v. trên sân thượng rộng rãi của Laid BackChalet? Mùa hè... Có một con sông với dòng nước tuyệt đẹp ngay gần nhà gỗ chalet.Đối với trẻ em và trẻ em chơi trong nước với con chó của chúng...Tôi rất khuyên dùng nó cho khóa học đi bộ. Mùa đông... 1 phút đi bộ từ trạm xe buýt đưa đón miễn phí từ nhà gỗ chalet.",
+  "city": "Hakuba",
+  "country": "Nhật Bản",
+  "phone_number": "123456777",
+  "average_rating": 4.85,
+  "email": "abc@gmail.com",
+  "image": "https://a0.muscache.com/im/pictures/miso/Hosting-918466982413904657/original/3af04cd1-3b1a-4795-ae67-ecac9064b271.jpeg?im_w=1200"
+}
+
+###
