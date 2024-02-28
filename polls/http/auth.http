@@ -1,0 +1,53 @@
+POST http://localhost:8000/api/register/
+Content-Type: application/json
+Vary: Accept
+
+{
+  "id": 1,
+  "first_name": "abc",
+  "last_name": "def",
+  "email": "abc@gmail.com",
+  "password": "123456789",
+  "number_phone": "123456789"
+}
+
+###
+
+POST http://localhost:8000/api/login/
+Content-Type: application/json
+Vary: Accept
+
+{
+  "email": "nvh.02021995@gmail.com",
+  "password": "123456789"
+}
+
+###
+
+
+POST http://localhost:8000/api/token/refresh/
+Content-Type: application/json
+Vary: Accept
+
+{
+  "refresh": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoicmVmcmVzaCIsImV4cCI6MTcwOTE3NDkzNCwiaWF0IjoxNzA5MDg4NTM0LCJqdGkiOiIzMmY0ODE3Mjk2NTE0MmRmOGI4Y2Y1NjExMWEzZmJiNCIsInVzZXJfaWQiOjJ9.cfNE3fGmOdAh7Yg5uDCZcMO-jzkeWrRxaDlzzRCX6a4"
+}
+
+###
+
+POST http://localhost:8000/api/token/verify/
+Content-Type: application/json
+Vary: Accept
+
+{
+  "token": ""
+}
+
+###
+
+GET http://localhost:8000/api/token/test/
+Content-Type: application/json
+Vary: Accept
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzA5MDg4NDk1LCJpYXQiOjE3MDkwODgxOTUsImp0aSI6ImRlOTUzMWI5NzNhYzRmMmQ5NDg0NTBkYTExZGJkY2ExIiwidXNlcl9pZCI6Mn0.TdB5B5fYjhh_dEXmgIPvDuma1H20aP7_CqdP3ncvFGI
+
+
