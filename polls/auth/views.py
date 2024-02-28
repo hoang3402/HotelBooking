@@ -1,10 +1,9 @@
 from rest_framework import generics
-from rest_framework.authtoken.models import Token
-from rest_framework.authtoken.views import ObtainAuthToken
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework_simplejwt.authentication import JWTAuthentication
+from rest_framework_simplejwt.tokens import RefreshToken
 
 from polls.auth.serializers import UserSerializer
 from polls.models import User
@@ -15,21 +14,20 @@ class UserCreateViewSet(generics.CreateAPIView):
     queryset = User.objects.all()
     serializer_class = UserSerializer
 
+    def create(self, request, *args, **kwargs):
+        response = super(UserCreateViewSet, self).create(request, *args, **kwargs)
+        user_data = response.data
+        user = User.objects.get(pk=user_data['id'])
+        refresh = RefreshToken.for_user(user)
+
+        return Response({
+            'refresh': str(refresh),
+            'access': str(refresh.access_token),
+            'user': user_data
+        })
+
 
 user_create_view = UserCreateViewSet.as_view()
-
-
-class UserLoginAPIView(ObtainAuthToken):
-    def post(self, request, *args, **kwargs):
-        serializer = self.serializer_class(data=request.data, context={'request': request})
-        serializer.is_valid(raise_exception=True)
-        user = serializer.validated_data['user']
-        token, created = Token.objects.get_or_create(user=user)
-        user_serializer = UserSerializer(user)
-        return Response({'token': token.key, 'user': user_serializer.data})
-
-
-user_login_view = UserLoginAPIView.as_view()
 
 
 class TestViewAPI(APIView):
