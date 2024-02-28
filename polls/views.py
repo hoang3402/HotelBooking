@@ -1,7 +1,9 @@
 from rest_framework import generics
+from rest_framework.authentication import TokenAuthentication, SessionAuthentication
 from rest_framework.authtoken.models import Token
 from rest_framework.authtoken.views import ObtainAuthToken
-from rest_framework.permissions import AllowAny
+from rest_framework.decorators import authentication_classes, permission_classes, api_view
+from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 
 from polls.models import Hotel, User
@@ -67,3 +69,12 @@ class UserLoginAPIView(ObtainAuthToken):
 
 
 user_login_view = UserLoginAPIView.as_view()
+
+
+@api_view(['GET'])
+@authentication_classes([SessionAuthentication, TokenAuthentication])
+@permission_classes([IsAuthenticated])
+def test_token(request):
+    return Response({
+        "detail": "Valid token."
+    })
