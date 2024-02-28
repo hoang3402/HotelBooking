@@ -5,6 +5,7 @@ from rest_framework.authtoken.views import ObtainAuthToken
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
+from rest_framework_simplejwt.authentication import JWTAuthentication
 
 from polls.models import Hotel, User
 from polls.serializers import HotelSerializer, UserSerializer
@@ -73,7 +74,7 @@ user_login_view = UserLoginAPIView.as_view()
 
 
 class TestViewAPI(APIView):
-    authentication_classes = [SessionAuthentication, TokenAuthentication]
+    authentication_classes = [JWTAuthentication]
     permission_classes = [IsAuthenticated]
 
     def get(self, request, *args, **kwargs):

@@ -13,20 +13,3 @@ Vary: Accept
 
 ###
 
-
-POST http://localhost:8000/api/login/
-Content-Type: application/json
-Vary: Accept
-
-{
-  "username": "abc@gmail.com",
-  "password": "123456789"
-}
-
-###
-
-GET http://localhost:8000/api/test-token/
-Content-Type: application/json
-Vary: Accept
-Authorization: Token 8750e3e17d3c59e551c82923cc106e1c62a3212e
-
