@@ -1,4 +1,4 @@
-POST http://localhost:8000/api/register/
+POST http://localhost:8000/api/auth/register/
 Content-Type: application/json
 Vary: Accept
 
@@ -13,7 +13,7 @@ Vary: Accept
 
 ###
 
-POST http://localhost:8000/api/login/
+POST http://localhost:8000/api/auth/login/
 Content-Type: application/json
 Vary: Accept
 
@@ -25,7 +25,7 @@ Vary: Accept
 ###
 
 
-POST http://localhost:8000/api/token/refresh/
+POST http://localhost:8000/api/auth/token/refresh/
 Content-Type: application/json
 Vary: Accept
 
@@ -35,7 +35,7 @@ Vary: Accept
 
 ###
 
-POST http://localhost:8000/api/token/verify/
+POST http://localhost:8000/api/auth/token/verify/
 Content-Type: application/json
 Vary: Accept
 
@@ -45,7 +45,7 @@ Vary: Accept
 
 ###
 
-GET http://localhost:8000/api/token/test/
+GET http://localhost:8000/api/auth/token/test/
 Content-Type: application/json
 Vary: Accept
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzA5MDg4NDk1LCJpYXQiOjE3MDkwODgxOTUsImp0aSI6ImRlOTUzMWI5NzNhYzRmMmQ5NDg0NTBkYTExZGJkY2ExIiwidXNlcl9pZCI6Mn0.TdB5B5fYjhh_dEXmgIPvDuma1H20aP7_CqdP3ncvFGI
