@@ -65,7 +65,8 @@ class UserLoginAPIView(ObtainAuthToken):
         serializer.is_valid(raise_exception=True)
         user = serializer.validated_data['user']
         token, created = Token.objects.get_or_create(user=user)
-        return Response({'token': token.key})
+        user_serializer = UserSerializer(user)
+        return Response({'token': token.key, 'user': user_serializer.data})
 
 
 user_login_view = UserLoginAPIView.as_view()
@@ -75,7 +76,7 @@ class TestViewAPI(APIView):
     authentication_classes = [SessionAuthentication, TokenAuthentication]
     permission_classes = [IsAuthenticated]
 
-    def get(self):
+    def get(self, request, *args, **kwargs):
         return Response({
             "detail": "Valid token."
         })
