@@ -43,6 +43,12 @@ urlpatterns = [
     path('feature/<str:pk>/edit/', views.feature_edit_view, name='feature_create_view'),
     path('feature/<str:pk>/delete/', views.feature_delete_view, name='feature_create_view'),
 
+    path('feature-hotel/', views.feature_hotel_list_view, name='feature_hotel_list_view'),
+    path('feature-hotel/<int:pk>/', views.feature_hotel_detail_view, name='feature_hotel_list_view'),
+    path('feature-hotel/create/', views.feature_hotel_create_view, name='feature_hotel_create_view'),
+    path('feature-hotel/<str:pk>/edit/', views.feature_hotel_edit_view, name='feature_hotel_create_view'),
+    path('feature-hotel/<str:pk>/delete/', views.feature_hotel_delete_view, name='feature_hotel_create_view'),
+
     path('city/', views.city_list_view, name='city_list_view'),
     path('city/create/', views.city_create_view, name='city_create_view'),
     path('city/<str:pk>/edit/', views.city_edit_view, name='city_create_view'),

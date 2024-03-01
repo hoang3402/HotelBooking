@@ -33,6 +33,7 @@ class Hotel(models.Model):
     image = models.CharField(max_length=255)
 
     city = models.ForeignKey(City, on_delete=models.CASCADE)
+    features = models.ManyToManyField('polls.HotelFeatures', through='polls.SpecificHotelFeature')
 
     def __str__(self):
         return f'{self.id} - {self.name}'

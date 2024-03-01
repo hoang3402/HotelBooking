@@ -1,8 +1,9 @@
-from rest_framework import viewsets
+from rest_framework import viewsets, status
+from rest_framework.response import Response
 
-from polls.models import City, Country, Hotel, Room, RoomType, HotelFeatures
+from polls.models import City, Country, Hotel, Room, RoomType, HotelFeatures, SpecificHotelFeature
 from polls.serializers import CitySerializer, CountrySerializer, HotelSerializer, RoomSerializer, RoomTypeSerializer, \
-    FeatureSerializer
+    FeatureSerializer, SpecificHotelFeatureSerializer
 
 
 # Hotel
@@ -57,6 +58,25 @@ feature_list_view = FeatureViewSet.as_view({'get': 'list'})
 feature_create_view = FeatureViewSet.as_view({'post': 'create'})
 feature_edit_view = FeatureViewSet.as_view({'put': 'update', 'patch': 'partial_update'})
 feature_delete_view = FeatureViewSet.as_view({'delete': 'destroy'})
+
+
+# Feature hotel
+
+class FeatureHotelViewSet(viewsets.ModelViewSet):
+    queryset = SpecificHotelFeature.objects.all()
+    serializer_class = SpecificHotelFeatureSerializer
+
+    def retrieve(self, *args, **kwargs):
+        specific_hotel_features = SpecificHotelFeature.objects.filter(hotel=kwargs['pk'])
+        serializer = SpecificHotelFeatureSerializer(specific_hotel_features, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+
+feature_hotel_list_view = FeatureHotelViewSet.as_view({'get': 'list'})
+feature_hotel_detail_view = FeatureHotelViewSet.as_view({'get': 'retrieve'})
+feature_hotel_create_view = FeatureHotelViewSet.as_view({'post': 'create'})
+feature_hotel_edit_view = FeatureHotelViewSet.as_view({'put': 'update', 'patch': 'partial_update'})
+feature_hotel_delete_view = FeatureHotelViewSet.as_view({'delete': 'destroy'})
 
 
 # City
