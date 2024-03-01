@@ -1,7 +1,8 @@
 from rest_framework import viewsets
 
-from polls.models import City, Country, Hotel, Room, RoomType
-from polls.serializers import CitySerializer, CountrySerializer, HotelSerializer, RoomSerializer, RoomTypeSerializer
+from polls.models import City, Country, Hotel, Room, RoomType, HotelFeatures
+from polls.serializers import CitySerializer, CountrySerializer, HotelSerializer, RoomSerializer, RoomTypeSerializer, \
+    FeatureSerializer
 
 
 # Hotel
@@ -43,6 +44,19 @@ room_type_list_view = RoomTypeViewSet.as_view({'get': 'list'})
 room_type_create_view = RoomTypeViewSet.as_view({'post': 'create'})
 room_type_edit_view = RoomTypeViewSet.as_view({'put': 'update', 'patch': 'partial_update'})
 room_type_delete_view = RoomTypeViewSet.as_view({'delete': 'destroy'})
+
+
+# Feature
+
+class FeatureViewSet(viewsets.ModelViewSet):
+    queryset = HotelFeatures.objects.all()
+    serializer_class = FeatureSerializer
+
+
+feature_list_view = FeatureViewSet.as_view({'get': 'list'})
+feature_create_view = FeatureViewSet.as_view({'post': 'create'})
+feature_edit_view = FeatureViewSet.as_view({'put': 'update', 'patch': 'partial_update'})
+feature_delete_view = FeatureViewSet.as_view({'delete': 'destroy'})
 
 
 # City

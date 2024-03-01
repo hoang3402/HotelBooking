@@ -38,6 +38,11 @@ urlpatterns = [
     path('room-type/<str:pk>/edit/', views.room_type_edit_view, name='room_type_create_view'),
     path('room-type/<str:pk>/delete/', views.room_type_delete_view, name='room_type_create_view'),
 
+    path('feature/', views.feature_list_view, name='feature_list_view'),
+    path('feature/create/', views.feature_create_view, name='feature_create_view'),
+    path('feature/<str:pk>/edit/', views.feature_edit_view, name='feature_create_view'),
+    path('feature/<str:pk>/delete/', views.feature_delete_view, name='feature_create_view'),
+
     path('city/', views.city_list_view, name='city_list_view'),
     path('city/create/', views.city_create_view, name='city_create_view'),
     path('city/<str:pk>/edit/', views.city_edit_view, name='city_create_view'),
