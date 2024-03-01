@@ -19,8 +19,24 @@ from django.urls import include, path
 from . import views
 
 urlpatterns = [
-    path('hotel/', include('polls.hotel.urls'), name='hotel'),
     path('auth/', include('polls.auth.urls'), name='auth'),
+
+    path('hotel/', views.hotel_list_view, name='hotels'),
+    path('hotel/create/', views.hotel_create_view, name='create_hotel'),
+    path('hotel/<int:pk>/', views.hotel_detail_view, name='detail_hotel'),
+    path('hotel/<int:pk>/edit/', views.hotel_edit_view, name='edit_hotel'),
+    path('hotel/<int:pk>/delete/', views.hotel_delete_view, name='delete_hotel'),
+
+    path('room/', views.room_list_view, name='rooms'),
+    path('room/create/', views.room_create_view, name='create_room'),
+    path('room/<int:pk>/', views.room_detail_view, name='detail_room'),
+    path('room/<int:pk>/edit/', views.room_edit_view, name='edit_room'),
+    path('room/<int:pk>/delete/', views.room_delete_view, name='delete_room'),
+
+    path('room-type/', views.room_type_list_view, name='room_type_list_view'),
+    path('room-type/create/', views.room_type_create_view, name='room_type_create_view'),
+    path('room-type/<str:pk>/edit/', views.room_type_edit_view, name='room_type_create_view'),
+    path('room-type/<str:pk>/delete/', views.room_type_delete_view, name='room_type_create_view'),
 
     path('city/', views.city_list_view, name='city_list_view'),
     path('city/create/', views.city_create_view, name='city_create_view'),

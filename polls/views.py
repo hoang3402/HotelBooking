@@ -1,7 +1,48 @@
 from rest_framework import viewsets
 
-from polls.models import City, Country
-from polls.serializers import CitySerializer, CountrySerializer
+from polls.models import City, Country, Hotel, Room, RoomType
+from polls.serializers import CitySerializer, CountrySerializer, HotelSerializer, RoomSerializer, RoomTypeSerializer
+
+
+# Hotel
+
+class HotelViewSet(viewsets.ModelViewSet):
+    queryset = Hotel.objects.all()
+    serializer_class = HotelSerializer
+
+
+hotel_list_view = HotelViewSet.as_view({'get': 'list'})
+hotel_detail_view = HotelViewSet.as_view({'get': 'retrieve'})
+hotel_create_view = HotelViewSet.as_view({'post': 'create'})
+hotel_edit_view = HotelViewSet.as_view({'put': 'update', 'patch': 'partial_update'})
+hotel_delete_view = HotelViewSet.as_view({'delete': 'destroy'})
+
+
+# Room
+
+class RoomViewSet(viewsets.ModelViewSet):
+    queryset = Room.objects.all()
+    serializer_class = RoomSerializer
+
+
+room_list_view = RoomViewSet.as_view({'get': 'list'})
+room_detail_view = RoomViewSet.as_view({'get': 'retrieve'})
+room_create_view = RoomViewSet.as_view({'post': 'create'})
+room_edit_view = RoomViewSet.as_view({'put': 'update', 'patch': 'partial_update'})
+room_delete_view = RoomViewSet.as_view({'delete': 'destroy'})
+
+
+# RoomType
+
+class RoomTypeViewSet(viewsets.ModelViewSet):
+    queryset = RoomType.objects.all()
+    serializer_class = RoomTypeSerializer
+
+
+room_type_list_view = RoomTypeViewSet.as_view({'get': 'list'})
+room_type_create_view = RoomTypeViewSet.as_view({'post': 'create'})
+room_type_edit_view = RoomTypeViewSet.as_view({'put': 'update', 'patch': 'partial_update'})
+room_type_delete_view = RoomTypeViewSet.as_view({'delete': 'destroy'})
 
 
 # City
