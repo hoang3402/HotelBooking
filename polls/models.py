@@ -3,17 +3,36 @@ from django.contrib.auth.models import PermissionsMixin
 from django.db import models
 
 
+class Country(models.Model):
+    code = models.CharField(max_length=20, primary_key=True)
+    name = models.CharField(max_length=255)
+    currency = models.CharField(max_length=18)
+
+    def __str__(self):
+        return self.name
+
+
+class City(models.Model):
+    code = models.CharField(max_length=20, primary_key=True)
+    name = models.CharField(max_length=255)
+
+    country = models.ForeignKey(Country, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return self.name
+
+
 class Hotel(models.Model):
     id = models.AutoField(primary_key=True)
     name = models.CharField(max_length=255)
     address = models.CharField(max_length=255)
     description = models.TextField(null=True)
-    city = models.CharField(max_length=255)
-    country = models.CharField(max_length=255)
     phone_number = models.CharField(max_length=20)
     average_rating = models.FloatField(default=0)
     email = models.EmailField()
     image = models.CharField(max_length=255)
+
+    city = models.ForeignKey(City, on_delete=models.CASCADE)
 
     def __str__(self):
         return f'{self.id} - {self.name}'
@@ -142,25 +161,6 @@ class Review(models.Model):
 
     def __str__(self):
         return f'{self.id} - {self.title}'
-
-
-class Country(models.Model):
-    code = models.CharField(max_length=20, primary_key=True)
-    name = models.CharField(max_length=255)
-    currency = models.CharField(max_length=18)
-
-    def __str__(self):
-        return self.name
-
-
-class City(models.Model):
-    code = models.CharField(max_length=20, primary_key=True)
-    name = models.CharField(max_length=255)
-
-    country = models.ForeignKey(Country, on_delete=models.CASCADE)
-
-    def __str__(self):
-        return self.name
 
 
 class HotelFeatures(models.Model):
