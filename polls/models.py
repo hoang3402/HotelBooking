@@ -144,19 +144,20 @@ class Review(models.Model):
         return f'{self.id} - {self.title}'
 
 
-class City(models.Model):
+class Country(models.Model):
     code = models.CharField(max_length=20, primary_key=True)
     name = models.CharField(max_length=255)
-    country_code = models.CharField(max_length=255)
+    currency = models.CharField(max_length=18)
 
     def __str__(self):
         return self.name
 
 
-class Country(models.Model):
+class City(models.Model):
     code = models.CharField(max_length=20, primary_key=True)
     name = models.CharField(max_length=255)
-    currency = models.CharField(max_length=18)
+
+    country = models.ForeignKey(Country, on_delete=models.CASCADE)
 
     def __str__(self):
         return self.name
@@ -167,9 +168,12 @@ class HotelFeatures(models.Model):
     description = models.CharField(max_length=255, null=True)
 
     def __str__(self):
-        return self.code
+        return f'{self.code} - {self.description}'
 
 
 class SpecificHotelFeature(models.Model):
     hotel = models.ForeignKey(Hotel, on_delete=models.CASCADE)
     feature = models.ForeignKey(HotelFeatures, on_delete=models.CASCADE)
+
+    class Meta:
+        unique_together = ('hotel', 'feature')
