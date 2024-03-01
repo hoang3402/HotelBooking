@@ -1,4 +1,5 @@
 from rest_framework import generics
+from rest_framework.permissions import IsAdminUser
 
 from polls.hotel.serializers import HotelSerializer
 from polls.models import Hotel
@@ -39,6 +40,7 @@ hotel_edit_view = HotelEditViewSet.as_view()
 class HotelDeleteViewSet(generics.DestroyAPIView):
     queryset = Hotel.objects.all()
     serializer_class = HotelSerializer
+    permission_classes = [IsAdminUser]
 
 
 hotel_delete_view = HotelDeleteViewSet.as_view()

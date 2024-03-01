@@ -10,7 +10,7 @@ Accept: application/json
 
 POST http://localhost:8000/api/hotel/create/
 Accept: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzA5MTA5OTczLCJpYXQiOjE3MDkxMDk2NzMsImp0aSI6ImI3ZTBiMGVlMWUwZjQxYmE5NzY5Y2ZjOGVjMmEyODgzIiwidXNlcl9pZCI6MTB9.L3WME9i4RpUDYWETB9wznKJ2zeH0ioBoRgsHP01ldQA
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzA5MjY3MzY5LCJpYXQiOjE3MDkyNjcwNjksImp0aSI6IjIyNzQ1ZDQ1NDY0MDQ5OTE4ODY3MzBmOTgzZGIzYzgyIiwidXNlcl9pZCI6MX0.w79HPcM9ykP_EdbL1IIyyAmqrvPSy_lp6GdYalN-8MQ
 
 {
   "name": "Nhà gỗ chalet toàn bộ nhà trong một ngôi nhà nghỉ dưỡng yên tĩnh Miso.Vị trí tốt. Cho phép mang theo thú cưng.",
