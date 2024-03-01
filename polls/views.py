@@ -1,5 +1,7 @@
-from rest_framework import viewsets, status
+from django.http import JsonResponse
+from rest_framework import viewsets, status, generics
 from rest_framework.response import Response
+from rest_framework.views import APIView
 
 from polls.models import City, Country, Hotel, Room, RoomType, HotelFeatures, SpecificHotelFeature
 from polls.serializers import CitySerializer, CountrySerializer, HotelSerializer, RoomSerializer, RoomTypeSerializer, \
@@ -18,6 +20,20 @@ hotel_detail_view = HotelViewSet.as_view({'get': 'retrieve'})
 hotel_create_view = HotelViewSet.as_view({'post': 'create'})
 hotel_edit_view = HotelViewSet.as_view({'put': 'update', 'patch': 'partial_update'})
 hotel_delete_view = HotelViewSet.as_view({'delete': 'destroy'})
+
+
+class HotelRoomViewSet(generics.ListAPIView):
+    queryset = Room.objects.all()
+    serializer_class = RoomSerializer
+
+    def get(self, request, *args, **kwargs):
+        hotel_id = kwargs.get('pk')
+        rooms = Room.objects.filter(hotel_id=hotel_id)  # Retrieve all rooms for the specific hotel
+        room_serializer = RoomSerializer(rooms, many=True)
+        return JsonResponse({'rooms': room_serializer.data})
+
+
+hotel_rooms_view = HotelRoomViewSet.as_view()
 
 
 # Room
