@@ -3,52 +3,13 @@ from django.contrib import admin
 from polls.models import Booking, Hotel, Review, Room, User, RoomType, SpecificHotelFeature, HotelFeatures, Country, \
     City
 
-
-@admin.register(Booking)
-class HotelAdmin(admin.ModelAdmin):
-    pass
-
-
-@admin.register(Hotel)
-class HotelAdmin(admin.ModelAdmin):
-    pass
-
-
-@admin.register(Review)
-class RoomAdmin(admin.ModelAdmin):
-    pass
-
-
-@admin.register(Room)
-class RoomAdmin(admin.ModelAdmin):
-    pass
-
-
-@admin.register(User)
-class UserAdmin(admin.ModelAdmin):
-    pass
-
-
-@admin.register(RoomType)
-class RoomTypeAdmin(admin.ModelAdmin):
-    pass
-
-
-@admin.register(SpecificHotelFeature)
-class HotelFeaturesAdmin(admin.ModelAdmin):
-    pass
-
-
-@admin.register(HotelFeatures)
-class HotelFeaturesAdmin(admin.ModelAdmin):
-    pass
-
-
-@admin.register(Country)
-class CityAdmin(admin.ModelAdmin):
-    pass
-
-
-@admin.register(City)
-class CityAdmin(admin.ModelAdmin):
-    pass
+admin.site.register(Booking)
+admin.site.register(Hotel)
+admin.site.register(Review)
+admin.site.register(Room)
+admin.site.register(User)
+admin.site.register(RoomType)
+admin.site.register(SpecificHotelFeature)
+admin.site.register(HotelFeatures)
+admin.site.register(Country)
+admin.site.register(City)
