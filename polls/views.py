@@ -1,11 +1,10 @@
 from django.http import JsonResponse
 from rest_framework import viewsets, status, generics
 from rest_framework.response import Response
-from rest_framework.views import APIView
 
-from polls.models import City, Country, Hotel, Room, RoomType, HotelFeatures, SpecificHotelFeature
+from polls.models import City, Country, Hotel, Room, RoomType, HotelFeatures, SpecificHotelFeature, Booking
 from polls.serializers import CitySerializer, CountrySerializer, HotelSerializer, RoomSerializer, RoomTypeSerializer, \
-    FeatureSerializer, SpecificHotelFeatureSerializer
+    FeatureSerializer, SpecificHotelFeatureSerializer, BookingSerializer
 
 
 # Hotel
@@ -119,3 +118,17 @@ country_list_view = CountryViewSet.as_view({'get': 'list'})
 country_create_view = CountryViewSet.as_view({'post': 'create'})
 country_edit_view = CountryViewSet.as_view({'put': 'update', 'patch': 'partial_update'})
 country_delete_view = CountryViewSet.as_view({'delete': 'destroy'})
+
+
+# Booking
+
+class BookingViewSet(viewsets.ModelViewSet):
+    queryset = Booking.objects.all()
+    serializer_class = BookingSerializer
+
+
+booking_list_view = BookingViewSet.as_view({'get': 'list'})
+booking_detail_view = BookingViewSet.as_view({'get': 'retrieve'})
+booking_create_view = BookingViewSet.as_view({'post': 'create'})
+booking_edit_view = BookingViewSet.as_view({'put': 'update', 'patch': 'partial_update'})
+booking_delete_view = BookingViewSet.as_view({'delete': 'destroy'})
