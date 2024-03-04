@@ -1,7 +1,6 @@
 from django.contrib import admin
 
-from polls.models import Booking, Hotel, Review, Room, User, RoomType, SpecificHotelFeature, HotelFeatures, Country, \
-    City
+from polls.models import *
 
 admin.site.register(Booking)
 admin.site.register(Hotel)
