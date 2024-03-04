@@ -84,10 +84,10 @@ WSGI_APPLICATION = 'HotelBooking.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'hoang3409_postgre',
-        "USER": "hoang3409",
-        "PASSWORD": "k8eHarwdXQH.AJg",
-        "HOST": "postgresql-hoang3409.alwaysdata.net",
+        'NAME': 'hotel-booking',
+        "USER": "nvh.02021995",
+        "PASSWORD": "xKIeGJ8Adqc6",
+        "HOST": "ep-withered-bird-40673570-pooler.ap-southeast-1.aws.neon.tech",
         "PORT": "5432",
     }
 }
