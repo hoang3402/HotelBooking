@@ -48,4 +48,6 @@ urlpatterns = [
     path('booking/create/', views.booking_create_view, name='booking_create_view'),
     path('booking/<str:pk>/edit/', views.booking_edit_view, name='booking_create_view'),
     path('booking/<str:pk>/delete/', views.booking_delete_view, name='booking_create_view'),
+
+
 ]
