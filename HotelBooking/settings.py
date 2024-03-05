@@ -24,7 +24,7 @@ SECRET_KEY = 'django-insecure-mf#r!f2)r($n$8c6&b_edpxuz-5f^fpw&e#om)0t_(sr7j1th8
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['localhost']
+ALLOWED_HOSTS = ['localhost', 'hotel-tma.zeabur.app']
 
 CORS_ORIGIN_ALLOW_ALL = False
 CORS_ORIGIN_WHITELIST = (
