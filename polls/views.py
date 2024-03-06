@@ -1,9 +1,10 @@
+from django.db.models import Q
 from rest_framework import viewsets, status
+from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
+from rest_framework.views import APIView
 
-from polls.models import City, Country, Hotel, Room, RoomType, HotelFeatures, SpecificHotelFeature, Booking
-from polls.serializers import CitySerializer, CountrySerializer, HotelSerializer, RoomSerializer, RoomTypeSerializer, \
-    FeatureSerializer, SpecificHotelFeatureSerializer, BookingSerializer, DetailHotelSerializer
+from polls.serializers import *
 
 
 # Hotel
@@ -125,3 +126,37 @@ booking_detail_view = BookingViewSet.as_view({'get': 'retrieve'})
 booking_create_view = BookingViewSet.as_view({'post': 'create'})
 booking_edit_view = BookingViewSet.as_view({'put': 'update', 'patch': 'partial_update'})
 booking_delete_view = BookingViewSet.as_view({'delete': 'destroy'})
+
+
+class Search(APIView):
+    permission_classes = [AllowAny]
+
+    def post(self, request):
+        # Get data from the POST request
+        number_adults = request.data.get('adults', None)
+        number_children = request.data.get('children', None)
+        country_code = request.data.get('country', None)
+        city_code = request.data.get('city', None)
+
+        queryset = Hotel.objects.all()
+
+        if number_adults:
+            queryset = queryset.filter(room__adults__gte=number_adults)
+
+        if number_children:
+            queryset = queryset.filter(room__children__gte=number_children)
+
+        if country_code:  # Update variable name
+            queryset = queryset.filter(city__country__code=country_code)
+
+        if city_code:
+            queryset = queryset.filter(city__code=city_code)
+
+        # Serialize the queryset
+        serializer = HotelSerializer(queryset, many=True)
+
+        # Return the serialized data as JSON response
+        return Response(serializer.data)
+
+
+search_view = Search.as_view()
