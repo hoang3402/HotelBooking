@@ -148,3 +148,6 @@ REST_FRAMEWORK = {
     #     'rest_framework.renderers.JSONRenderer',
     # )
 }
+
+api_key_exchange_currency = '7aa01f8cdamsh18ce574fb6df7fbp110df3jsn7d64d0db076b'
+

@@ -1,10 +1,11 @@
-from django.db.models import Q
 from rest_framework import viewsets, status
-from rest_framework.permissions import AllowAny
+from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
+from HotelBooking.settings import api_key_exchange_currency
 from polls.serializers import *
+from polls.utilities import is_room_available, calculate_total_cost, get_exchange_rate
 
 
 # Hotel
@@ -160,3 +161,60 @@ class Search(APIView):
 
 
 search_view = Search.as_view()
+
+
+class MakeBooking(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request, hotel_id):
+        user = request.user
+        room_id = request.data.get('room_id')
+        check_in_date = request.data.get('check_in_date')
+        check_out_date = request.data.get('check_out_date')
+        adults = request.data.get('adults')
+        children = request.data.get('children')
+        currency = request.data.get('currency', 'USD')
+
+        if (check_in_date or check_out_date) is None:
+            return Response({"error": "Check-in and check-out dates are required."},
+                            status=status.HTTP_400_BAD_REQUEST)
+
+        try:
+            hotel = Hotel.objects.get(id=hotel_id)
+            room = Room.objects.get(id=room_id)
+
+            # Check room availability for the specified dates
+            if not is_room_available(room, check_in_date, check_out_date):
+                return Response({"error": "Room not available for the specified dates."},
+                                status=status.HTTP_400_BAD_REQUEST)
+
+            hotel_currency = hotel.city.country.currency
+            exchange_rate = 1
+            if currency != hotel_currency:
+                exchange_rate = get_exchange_rate(api_key_exchange_currency, hotel_currency, currency)
+                if exchange_rate is None:
+                    return Response({"error": "Failed to retrieve exchange rate."},
+                                    status=status.HTTP_400_BAD_REQUEST)
+
+            price = calculate_total_cost(check_in_date, check_out_date, room.price, exchange_rate)
+
+            booking = Booking.objects.create(
+                user=user,
+                room=room,
+                hotel=hotel,
+                check_in_date=check_in_date,
+                check_out_date=check_out_date,
+                adults=adults,
+                children=children,
+                total_price=price
+            )
+
+            serializer = BookingSerializer(booking)
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+
+        except (Hotel.DoesNotExist, Room.DoesNotExist):
+            return Response({"error": "Hotel or room not found."},
+                            status=status.HTTP_400_BAD_REQUEST)
+
+
+make_booking_view = MakeBooking.as_view()
