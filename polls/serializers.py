@@ -72,7 +72,7 @@ class DetailRoomSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Room
-        fields = ['id', 'name', 'description', 'maximum_occupancy', 'price', 'image', 'is_available', 'room_type']
+        fields = ['id', 'name', 'description', 'adults', 'children', 'price', 'image', 'is_available', 'room_type']
 
 
 class DetailHotelSerializer(serializers.ModelSerializer):
