@@ -55,4 +55,5 @@ urlpatterns = [
     path('booking/cancel/<int:pk>/', views.cancel_booking_view, name="cancel_booking"),
 
     path('search/', views.search_view, name="search"),
+    path('is-available/', views.days_room_available_view, name="is_room_available"),
 ]

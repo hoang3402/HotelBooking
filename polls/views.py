@@ -5,7 +5,7 @@ from rest_framework.views import APIView
 
 from HotelBooking.settings import API_KEY_EXCHANGE_CURRENCY
 from polls.serializers import *
-from polls.utilities import is_room_available, calculate_total_cost, get_exchange_rate
+from polls.utilities import calculate_total_cost, get_exchange_rate, days_available, is_room_available
 
 
 # Hotel
@@ -184,8 +184,6 @@ class MakeBooking(APIView):
         room_id = request.data.get('room_id')
         check_in_date = request.data.get('check_in_date')
         check_out_date = request.data.get('check_out_date')
-        adults = request.data.get('adults')
-        children = request.data.get('children')
         currency = request.data.get('currency', 'USD')
 
         if (check_in_date or check_out_date) is None:
@@ -194,6 +192,10 @@ class MakeBooking(APIView):
 
         try:
             room = Room.objects.get(id=room_id)
+
+            if room.is_available is False:
+                return Response({"error": "Room not available."},
+                                status=status.HTTP_400_BAD_REQUEST)
 
             # Check room availability for the specified dates
             if not is_room_available(room, check_in_date, check_out_date):
@@ -225,8 +227,6 @@ class MakeBooking(APIView):
                 hotel=room.hotel,
                 check_in_date=check_in_date,
                 check_out_date=check_out_date,
-                adults=adults,
-                children=children,
                 total_price=price,
                 currency=currency,
                 total_price_usd=total_price_usd
@@ -282,3 +282,38 @@ class CancelBooking(APIView):
 
 
 cancel_booking_view = CancelBooking.as_view()
+
+
+class DaysRoomAvailableBooking(APIView):
+    permission_classes = [AllowAny]
+
+    def post(self, request):
+        room_id = request.data.get('room_id')
+        year = request.data.get('year')
+        month = request.data.get('month')
+
+        if (year or month) is None:
+            return Response({"error": "Check-in and check-out dates are required."},
+                            status=status.HTTP_400_BAD_REQUEST)
+
+        # try parameter
+        try:
+            year = int(year)
+            month = int(month)
+        except ValueError:
+            return Response({"error": "Invalid year or month."}, status=status.HTTP_400_BAD_REQUEST)
+
+        try:
+            room = Room.objects.get(id=room_id)
+
+            if room.is_available is False:
+                return Response({"error": "Room not available."},
+                                status=status.HTTP_400_BAD_REQUEST)
+
+            is_available = days_available(room, year, month)
+            return Response({"days": is_available}, status=status.HTTP_200_OK)
+        except Room.DoesNotExist:
+            return Response({"error": "Room not found."}, status=status.HTTP_404_NOT_FOUND)
+
+
+days_room_available_view = DaysRoomAvailableBooking.as_view()

@@ -1,4 +1,5 @@
-from datetime import datetime
+import calendar
+from datetime import datetime, timedelta, date
 from decimal import Decimal
 
 import requests
@@ -38,6 +39,31 @@ def is_room_available(room, check_in_date, check_out_date):
     )
 
     return not existing_bookings.exists()
+
+
+def days_available(room, year, month):
+    # Check if the room is available for the specified dates
+    start_date = date(year, month, 1)  # Create the first day of the month
+    end_date = start_date + timedelta(
+        days=calendar.monthrange(year, month)[1] - 1)  # Last day of the month (excluding next month)
+
+    # Adjust the query based on your data model and booking status definition
+    existing_bookings = Booking.objects.filter(
+        room=room,
+        status__in=['Pending', 'Confirmed'],
+        check_out_date__gte=start_date,
+        check_in_date__lte=end_date
+    )
+
+    # All days in the month
+    all_days = [start_date + timedelta(days=i) for i in range(end_date.day)]
+
+    available_days = []
+    for day in all_days:
+        if not existing_bookings.filter(check_in_date__lte=day, check_out_date__gte=day).exists():
+            available_days.append(day)
+
+    return available_days
 
 
 def calculate_total_cost(check_in_date, check_out_date, foreign_price, exchange_rate):

@@ -137,8 +137,6 @@ class Booking(models.Model):
     id = models.AutoField(primary_key=True)
     check_in_date = models.DateField()
     check_out_date = models.DateField()
-    adults = models.IntegerField()
-    children = models.IntegerField()
     total_price = models.DecimalField(max_digits=102, decimal_places=2)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
