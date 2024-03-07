@@ -43,12 +43,16 @@ urlpatterns = [
     path('country/<str:pk>/edit/', views.country_edit_view, name='country_edit_view'),
     path('country/<str:pk>/delete/', views.country_delete_view, name='country_delete_view'),
 
-    path('booking/', views.booking_list_view, name='booking_list_view'),
-    path('booking/<int:pk>/', views.booking_detail_view, name='booking_list_view'),
-    path('booking/create/', views.booking_create_view, name='booking_create_view'),
-    path('booking/<str:pk>/edit/', views.booking_edit_view, name='booking_edit_view'),
-    path('booking/<str:pk>/delete/', views.booking_delete_view, name='booking_delete_view'),
+    path('staff/booking/', views.staff_booking_list_view, name='staff_booking_list_view'),
+    path('staff/booking/<int:pk>/', views.staff_booking_detail_view, name='staff_booking_list_view'),
+    path('staff/booking/create/', views.staff_booking_create_view, name='staff_booking_create_view'),
+    path('staff/booking/<str:pk>/edit/', views.staff_booking_edit_view, name='staff_booking_edit_view'),
+    path('staff/booking/<str:pk>/delete/', views.staff_booking_delete_view, name='staff_booking_delete_view'),
+
+    path('booking/', views.view_bookings_view, name="booking_list_view"),
+    path('booking/<int:pk>/', views.view_booking_view, name="booking_detail_view"),
+    path('booking/create/', views.make_booking_view, name="make_booking"),
+    path('booking/cancel/<int:pk>/', views.cancel_booking_view, name="cancel_booking"),
 
     path('search/', views.search_view, name="search"),
-    path('make-booking/', views.make_booking_view, name="make_booking")
 ]

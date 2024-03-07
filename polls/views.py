@@ -1,5 +1,5 @@
 from rest_framework import viewsets, status
-from rest_framework.permissions import AllowAny, IsAuthenticated
+from rest_framework.permissions import AllowAny, IsAuthenticated, IsAdminUser
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
@@ -120,13 +120,14 @@ country_delete_view = CountryViewSet.as_view({'delete': 'destroy'})
 class BookingViewSet(viewsets.ModelViewSet):
     queryset = Booking.objects.all()
     serializer_class = BookingSerializer
+    permission_classes = [IsAdminUser]
 
 
-booking_list_view = BookingViewSet.as_view({'get': 'list'})
-booking_detail_view = BookingViewSet.as_view({'get': 'retrieve'})
-booking_create_view = BookingViewSet.as_view({'post': 'create'})
-booking_edit_view = BookingViewSet.as_view({'put': 'update', 'patch': 'partial_update'})
-booking_delete_view = BookingViewSet.as_view({'delete': 'destroy'})
+staff_booking_list_view = BookingViewSet.as_view({'get': 'list'})
+staff_booking_detail_view = BookingViewSet.as_view({'get': 'retrieve'})
+staff_booking_create_view = BookingViewSet.as_view({'post': 'create'})
+staff_booking_edit_view = BookingViewSet.as_view({'put': 'update', 'patch': 'partial_update'})
+staff_booking_delete_view = BookingViewSet.as_view({'delete': 'destroy'})
 
 
 class Search(APIView):
@@ -161,6 +162,18 @@ class Search(APIView):
 
 
 search_view = Search.as_view()
+
+
+class ViewBookings(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        bookings = Booking.objects.filter(user=request.user)
+        serializer = BookingSerializer(bookings, many=True)
+        return Response(serializer.data)
+
+
+view_bookings_view = ViewBookings.as_view()
 
 
 class MakeBooking(APIView):
@@ -228,3 +241,44 @@ class MakeBooking(APIView):
 
 
 make_booking_view = MakeBooking.as_view()
+
+
+class ViewBooking(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request, pk):
+        try:
+            booking = Booking.objects.get(id=pk, user=request.user)
+            serializer = BookingDetailsSerializer(booking)
+            return Response(serializer.data)
+        except Booking.DoesNotExist:
+            return Response({"error": "Booking not found."}, status=status.HTTP_404_NOT_FOUND)
+
+
+view_booking_view = ViewBooking.as_view()
+
+
+class CancelBooking(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request, pk):
+        try:
+            booking = Booking.objects.get(id=pk, user=request.user)
+
+            if booking.status == 'Cancelled':
+                return Response({"message": "Booking already canceled."}, status=status.HTTP_400_BAD_REQUEST)
+
+            if booking.status == 'Completed':
+                return Response({"message": "Booking already completed."}, status=status.HTTP_400_BAD_REQUEST)
+
+            if booking.status == 'Confirmed':
+                return Response({"message": "Booking already confirmed."}, status=status.HTTP_400_BAD_REQUEST)
+
+            booking.status = 'Cancelled'
+            booking.save()
+            return Response({"message": "Booking canceled successfully."}, status=status.HTTP_200_OK)
+        except Booking.DoesNotExist:
+            return Response({"error": "Booking not found."}, status=status.HTTP_404_NOT_FOUND)
+
+
+cancel_booking_view = CancelBooking.as_view()
