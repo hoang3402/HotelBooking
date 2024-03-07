@@ -25,4 +25,7 @@ urlpatterns = [
     path('token/refresh/', views.refresh_token_view, name='token_refresh'),
     path('token/verify/', TokenVerifyView.as_view(), name='token_verify'),
     path('token/test/', views.test_token, name='token_test'),
+
+    path('permissions/', views.check_permission, name='permissions'),
+    path('permissions/<int:user_id>/', views.permissions, name='permissions'),
 ]

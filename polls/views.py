@@ -1,9 +1,10 @@
 from rest_framework import viewsets, status
-from rest_framework.permissions import AllowAny, IsAuthenticated, IsAdminUser
+from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from HotelBooking.settings import API_KEY_EXCHANGE_CURRENCY
+from polls.auth.views import StaffPermission, AdminPermission
 from polls.serializers import *
 from polls.utilities import calculate_total_cost, get_exchange_rate, days_available, is_room_available
 
@@ -13,6 +14,13 @@ from polls.utilities import calculate_total_cost, get_exchange_rate, days_availa
 class HotelViewSet(viewsets.ModelViewSet):
     queryset = Hotel.objects.all()
     serializer_class = HotelSerializer
+    permission_classes_by_action = {
+        'list': [AllowAny],
+        'create': [StaffPermission, AdminPermission],
+        'update': [StaffPermission, AdminPermission],
+        'partial_update': [StaffPermission, AdminPermission],
+        'destroy': [AdminPermission]
+    }
 
 
 hotel_list_view = HotelViewSet.as_view({'get': 'list'})
@@ -35,6 +43,14 @@ hotel_detail_view = HotelDetailRoomViewSet.as_view({'get': 'retrieve'})
 class RoomViewSet(viewsets.ModelViewSet):
     queryset = Room.objects.all()
     serializer_class = RoomSerializer
+    permission_classes_by_action = {
+        'list': [AllowAny],
+        'retrieve': [AllowAny],
+        'create': [StaffPermission, AdminPermission],
+        'update': [StaffPermission, AdminPermission],
+        'partial_update': [StaffPermission, AdminPermission],
+        'destroy': [AdminPermission]
+    }
 
 
 staff_room_list_view = RoomViewSet.as_view({'get': 'list'})
@@ -49,6 +65,13 @@ staff_room_delete_view = RoomViewSet.as_view({'delete': 'destroy'})
 class RoomTypeViewSet(viewsets.ModelViewSet):
     queryset = RoomType.objects.all()
     serializer_class = RoomTypeSerializer
+    permission_classes_by_action = {
+        'list': [AllowAny],
+        'create': [StaffPermission, AdminPermission],
+        'update': [StaffPermission, AdminPermission],
+        'partial_update': [StaffPermission, AdminPermission],
+        'destroy': [AdminPermission]
+    }
 
 
 room_type_list_view = RoomTypeViewSet.as_view({'get': 'list'})
@@ -62,6 +85,13 @@ room_type_delete_view = RoomTypeViewSet.as_view({'delete': 'destroy'})
 class FeatureViewSet(viewsets.ModelViewSet):
     queryset = HotelFeatures.objects.all()
     serializer_class = FeatureSerializer
+    permission_classes_by_action = {
+        'list': [AllowAny],
+        'create': [StaffPermission, AdminPermission],
+        'update': [StaffPermission, AdminPermission],
+        'partial_update': [StaffPermission, AdminPermission],
+        'destroy': [AdminPermission]
+    }
 
 
 feature_list_view = FeatureViewSet.as_view({'get': 'list'})
@@ -75,6 +105,14 @@ feature_delete_view = FeatureViewSet.as_view({'delete': 'destroy'})
 class FeatureHotelViewSet(viewsets.ModelViewSet):
     queryset = SpecificHotelFeature.objects.all()
     serializer_class = SpecificHotelFeatureSerializer
+    permission_classes_by_action = {
+        'list': [AllowAny],
+        'retrieve': [StaffPermission, AdminPermission],
+        'create': [StaffPermission, AdminPermission],
+        'update': [StaffPermission, AdminPermission],
+        'partial_update': [StaffPermission, AdminPermission],
+        'destroy': [AdminPermission]
+    }
 
     def retrieve(self, *args, **kwargs):
         specific_hotel_features = SpecificHotelFeature.objects.filter(hotel=kwargs['pk'])
@@ -94,6 +132,14 @@ feature_hotel_delete_view = FeatureHotelViewSet.as_view({'delete': 'destroy'})
 class CityViewSet(viewsets.ModelViewSet):
     queryset = City.objects.all()
     serializer_class = CitySerializer
+    permission_classes_by_action = {
+        'list': [AllowAny],
+        'retrieve': [StaffPermission, AdminPermission],
+        'create': [StaffPermission, AdminPermission],
+        'update': [StaffPermission, AdminPermission],
+        'partial_update': [StaffPermission, AdminPermission],
+        'destroy': [AdminPermission]
+    }
 
 
 city_list_view = CityViewSet.as_view({'get': 'list'})
@@ -107,6 +153,14 @@ city_delete_view = CityViewSet.as_view({'delete': 'destroy'})
 class CountryViewSet(viewsets.ModelViewSet):
     queryset = Country.objects.all()
     serializer_class = CountrySerializer
+    permission_classes_by_action = {
+        'list': [AllowAny],
+        'retrieve': [StaffPermission, AdminPermission],
+        'create': [StaffPermission, AdminPermission],
+        'update': [StaffPermission, AdminPermission],
+        'partial_update': [StaffPermission, AdminPermission],
+        'destroy': [AdminPermission]
+    }
 
 
 country_list_view = CountryViewSet.as_view({'get': 'list'})
@@ -120,7 +174,14 @@ country_delete_view = CountryViewSet.as_view({'delete': 'destroy'})
 class BookingViewSet(viewsets.ModelViewSet):
     queryset = Booking.objects.all()
     serializer_class = BookingSerializer
-    permission_classes = [IsAdminUser]
+    permission_classes_by_action = {
+        'list': [StaffPermission, AdminPermission],
+        'retrieve': [StaffPermission, AdminPermission],
+        'create': [StaffPermission, AdminPermission],
+        'update': [StaffPermission, AdminPermission],
+        'partial_update': [StaffPermission, AdminPermission],
+        'destroy': [AdminPermission]
+    }
 
 
 staff_booking_list_view = BookingViewSet.as_view({'get': 'list'})
@@ -320,7 +381,7 @@ days_room_available_view = DaysRoomAvailableBooking.as_view()
 
 
 class ToggleRoomAvailability(APIView):
-    permission_classes = [IsAdminUser]
+    permission_classes = [StaffPermission, AdminPermission]
 
     def post(self, request, pk):
         try:
