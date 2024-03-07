@@ -62,13 +62,32 @@ class UserLoginViewSet(APIView):
         except AuthenticationFailed as e:
             return response.Response({'error': str(e)}, status=status.HTTP_401_UNAUTHORIZED)
 
-        except Exception as e:
-            # Handle unexpected errors gracefully (e.g., log the error and return a generic error message)
+        except Exception:
             return response.Response({'error': 'An internal error occurred.'},
                                      status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 
 user_login_view = UserLoginViewSet.as_view()
+
+
+class RefreshTokenViewSet(APIView):
+    permission_classes = [AllowAny]
+
+    def post(self, request, *args, **kwargs):
+        try:
+            refresh = RefreshToken(request.data.get('refresh'))
+
+            return response.Response({
+                'refresh': str(refresh),
+                'access': str(refresh.access_token),
+            }, status=status.HTTP_200_OK)
+        
+        except Exception:
+            return response.Response({'error': 'An internal error occurred.'},
+                                     status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+
+refresh_token_view = RefreshTokenViewSet.as_view()
 
 
 class TestViewAPI(APIView):
