@@ -33,7 +33,8 @@ def is_room_available(room, check_in_date, check_out_date):
     existing_bookings = Booking.objects.filter(
         room=room,
         check_in_date__lt=check_out_date,
-        check_out_date__gt=check_in_date
+        check_out_date__gt=check_in_date,
+        status__in=['Pending', 'Confirmed', 'Completed']
     )
 
     return not existing_bookings.exists()
