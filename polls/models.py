@@ -143,6 +143,8 @@ class Booking(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     status = models.CharField(choices=type_status, default='Pending')
+    currency = models.CharField(max_length=3, default='USD')
+    total_price_usd = models.DecimalField(max_digits=102, decimal_places=2)
 
     room = models.ForeignKey(Room, on_delete=models.CASCADE)
     hotel = models.ForeignKey(Hotel, on_delete=models.CASCADE)

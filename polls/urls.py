@@ -50,5 +50,5 @@ urlpatterns = [
     path('booking/<str:pk>/delete/', views.booking_delete_view, name='booking_create_view'),
 
     path('search/', views.search_view, name="search"),
-    path('make-booking/<int:hotel_id>/', views.make_booking_view, name="make_booking")
+    path('make-booking/', views.make_booking_view, name="make_booking")
 ]

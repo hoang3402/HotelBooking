@@ -166,7 +166,7 @@ search_view = Search.as_view()
 class MakeBooking(APIView):
     permission_classes = [IsAuthenticated]
 
-    def post(self, request, hotel_id):
+    def post(self, request):
         user = request.user
         room_id = request.data.get('room_id')
         check_in_date = request.data.get('check_in_date')
@@ -180,7 +180,6 @@ class MakeBooking(APIView):
                             status=status.HTTP_400_BAD_REQUEST)
 
         try:
-            hotel = Hotel.objects.get(id=hotel_id)
             room = Room.objects.get(id=room_id)
 
             # Check room availability for the specified dates
@@ -188,7 +187,7 @@ class MakeBooking(APIView):
                 return Response({"error": "Room not available for the specified dates."},
                                 status=status.HTTP_400_BAD_REQUEST)
 
-            hotel_currency = hotel.city.country.currency
+            hotel_currency = room.hotel.city.country.currency
             exchange_rate = 1
             if currency != hotel_currency:
                 exchange_rate = get_exchange_rate(API_KEY_EXCHANGE_CURRENCY, hotel_currency, currency)
@@ -198,15 +197,26 @@ class MakeBooking(APIView):
 
             price = calculate_total_cost(check_in_date, check_out_date, room.price, exchange_rate)
 
+            exchange_rate = 1
+            if hotel_currency != 'USD':
+                exchange_rate = get_exchange_rate(API_KEY_EXCHANGE_CURRENCY, hotel_currency, 'USD')
+                if exchange_rate is None:
+                    return Response({"error": "Failed to retrieve exchange rate."},
+                                    status=status.HTTP_400_BAD_REQUEST)
+
+            total_price_usd = calculate_total_cost(check_in_date, check_out_date, room.price, exchange_rate)
+
             booking = Booking.objects.create(
                 user=user,
                 room=room,
-                hotel=hotel,
+                hotel=room.hotel,
                 check_in_date=check_in_date,
                 check_out_date=check_out_date,
                 adults=adults,
                 children=children,
-                total_price=price
+                total_price=price,
+                currency=currency,
+                total_price_usd=total_price_usd
             )
 
             serializer = BookingSerializer(booking)
