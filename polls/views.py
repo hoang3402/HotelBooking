@@ -3,7 +3,7 @@ from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from HotelBooking.settings import api_key_exchange_currency
+from HotelBooking.settings import API_KEY_EXCHANGE_CURRENCY
 from polls.serializers import *
 from polls.utilities import is_room_available, calculate_total_cost, get_exchange_rate
 
@@ -191,7 +191,7 @@ class MakeBooking(APIView):
             hotel_currency = hotel.city.country.currency
             exchange_rate = 1
             if currency != hotel_currency:
-                exchange_rate = get_exchange_rate(api_key_exchange_currency, hotel_currency, currency)
+                exchange_rate = get_exchange_rate(API_KEY_EXCHANGE_CURRENCY, hotel_currency, currency)
                 if exchange_rate is None:
                     return Response({"error": "Failed to retrieve exchange rate."},
                                     status=status.HTTP_400_BAD_REQUEST)

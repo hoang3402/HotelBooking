@@ -20,6 +20,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = 'django-insecure-mf#r!f2)r($n$8c6&b_edpxuz-5f^fpw&e#om)0t_(sr7j1th8'
+API_KEY_EXCHANGE_CURRENCY = '7aa01f8cdamsh18ce574fb6df7fbp110df3jsn7d64d0db076b'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -149,5 +150,4 @@ REST_FRAMEWORK = {
     # )
 }
 
-api_key_exchange_currency = '7aa01f8cdamsh18ce574fb6df7fbp110df3jsn7d64d0db076b'
 
