@@ -53,11 +53,11 @@ class RoomViewSet(viewsets.ModelViewSet):
     }
 
 
-staff_room_list_view = RoomViewSet.as_view({'get': 'list'})
-staff_room_detail_view = RoomViewSet.as_view({'get': 'retrieve'})
-staff_room_create_view = RoomViewSet.as_view({'post': 'create'})
-staff_room_edit_view = RoomViewSet.as_view({'put': 'update', 'patch': 'partial_update'})
-staff_room_delete_view = RoomViewSet.as_view({'delete': 'destroy'})
+room_list_view = RoomViewSet.as_view({'get': 'list'})
+room_detail_view = RoomViewSet.as_view({'get': 'retrieve'})
+room_create_view = RoomViewSet.as_view({'post': 'create'})
+room_edit_view = RoomViewSet.as_view({'put': 'update', 'patch': 'partial_update'})
+room_delete_view = RoomViewSet.as_view({'delete': 'destroy'})
 
 
 # RoomType

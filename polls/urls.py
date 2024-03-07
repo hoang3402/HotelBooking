@@ -11,13 +11,12 @@ urlpatterns = [
     path('hotel/<int:pk>/edit/', views.hotel_edit_view, name='edit_hotel'),
     path('hotel/<int:pk>/delete/', views.hotel_delete_view, name='delete_hotel'),
 
-    # Room for staff
-    path('staff/room/', views.staff_room_list_view, name='staff_rooms'),
-    path('staff/room/create/', views.staff_room_create_view, name='create_staff_room'),
-    path('staff/room/toggle/', views.toggle_room_availability_view, name='toggle_availability_staff_room'),
-    path('staff/room/<int:pk>/', views.staff_room_detail_view, name='detail_staff_room'),
-    path('staff/room/<int:pk>/edit/', views.staff_room_edit_view, name='edit_staff_room'),
-    path('staff/room/<int:pk>/delete/', views.staff_room_delete_view, name='delete_staff_room'),
+    path('room/', views.room_list_view, name='rooms'),
+    path('room/create/', views.room_create_view, name='create_room'),
+    path('room/toggle/', views.toggle_room_availability_view, name='toggle_availability_room'),
+    path('room/<int:pk>/', views.room_detail_view, name='detail_room'),
+    path('room/<int:pk>/edit/', views.room_edit_view, name='edit_room'),
+    path('room/<int:pk>/delete/', views.room_delete_view, name='delete_room'),
 
     path('room-type/', views.room_type_list_view, name='room_type_list_view'),
     path('room-type/create/', views.room_type_create_view, name='room_type_create_view'),
