@@ -37,11 +37,11 @@ class RoomViewSet(viewsets.ModelViewSet):
     serializer_class = RoomSerializer
 
 
-room_list_view = RoomViewSet.as_view({'get': 'list'})
-room_detail_view = RoomViewSet.as_view({'get': 'retrieve'})
-room_create_view = RoomViewSet.as_view({'post': 'create'})
-room_edit_view = RoomViewSet.as_view({'put': 'update', 'patch': 'partial_update'})
-room_delete_view = RoomViewSet.as_view({'delete': 'destroy'})
+staff_room_list_view = RoomViewSet.as_view({'get': 'list'})
+staff_room_detail_view = RoomViewSet.as_view({'get': 'retrieve'})
+staff_room_create_view = RoomViewSet.as_view({'post': 'create'})
+staff_room_edit_view = RoomViewSet.as_view({'put': 'update', 'patch': 'partial_update'})
+staff_room_delete_view = RoomViewSet.as_view({'delete': 'destroy'})
 
 
 # RoomType
@@ -317,3 +317,20 @@ class DaysRoomAvailableBooking(APIView):
 
 
 days_room_available_view = DaysRoomAvailableBooking.as_view()
+
+
+class ToggleRoomAvailability(APIView):
+    permission_classes = [IsAdminUser]
+
+    def post(self, request, pk):
+        try:
+            room = Room.objects.get(id=pk)
+            room.is_available = not room.is_available
+            room.save()
+            return Response({"message": "Room availability toggled successfully."},
+                            status=status.HTTP_200_OK)
+        except Room.DoesNotExist:
+            return Response({"error": "Room not found."}, status=status.HTTP_404_NOT_FOUND)
+
+
+toggle_room_availability_view = ToggleRoomAvailability.as_view()
