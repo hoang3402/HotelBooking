@@ -16,26 +16,24 @@ class HotelViewSet(viewsets.ModelViewSet):
     serializer_class = HotelSerializer
     permission_classes_by_action = {
         'list': [AllowAny],
+        'retrieve': [AllowAny],
         'create': [StaffPermission, AdminPermission],
         'update': [StaffPermission, AdminPermission],
         'partial_update': [StaffPermission, AdminPermission],
         'destroy': [AdminPermission]
     }
 
+    def retrieve(self, request, *args, **kwargs):
+        instance = self.get_object()
+        serializer = DetailHotelSerializer(instance)
+        return Response(serializer.data)
+
 
 hotel_list_view = HotelViewSet.as_view({'get': 'list'})
-# hotel_detail_view = HotelViewSet.as_view({'get': 'retrieve'})
+hotel_detail_view = HotelViewSet.as_view({'get': 'retrieve'})
 hotel_create_view = HotelViewSet.as_view({'post': 'create'})
 hotel_edit_view = HotelViewSet.as_view({'put': 'update', 'patch': 'partial_update'})
 hotel_delete_view = HotelViewSet.as_view({'delete': 'destroy'})
-
-
-class HotelDetailRoomViewSet(viewsets.ModelViewSet):
-    queryset = Hotel.objects.all()
-    serializer_class = DetailHotelSerializer
-
-
-hotel_detail_view = HotelDetailRoomViewSet.as_view({'get': 'retrieve'})
 
 
 # Room
@@ -51,6 +49,11 @@ class RoomViewSet(viewsets.ModelViewSet):
         'partial_update': [StaffPermission, AdminPermission],
         'destroy': [AdminPermission]
     }
+
+    def retrieve(self, request, *args, **kwargs):
+        instance = self.get_object()
+        serializer = DetailRoomSerializer(instance)
+        return Response(serializer.data)
 
 
 room_list_view = RoomViewSet.as_view({'get': 'list'})
