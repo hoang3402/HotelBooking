@@ -329,10 +329,9 @@ class DaysRoomAvailableBooking(APIView):
         month = request.data.get('month')
 
         if (year or month) is None:
-            return Response({"error": "Check-in and check-out dates are required."},
+            return Response({"error": "Year and month are required."},
                             status=status.HTTP_400_BAD_REQUEST)
 
-        # try parameter
         try:
             year = int(year)
             month = int(month)
