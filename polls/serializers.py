@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from polls.models import City, Country, Hotel, Room, RoomType, HotelFeatures, SpecificHotelFeature, Booking
+from polls.models import City, Country, Hotel, Room, RoomType, HotelFeatures, SpecificHotelFeature, Booking, Province
 
 
 class FeatureNameSerializer(serializers.ModelSerializer):
@@ -22,19 +22,25 @@ class CountrySerializer(serializers.ModelSerializer):
 
 
 class CityDetailSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = City
+        fields = '__all__'
+
+
+class ProvinceSerializer(serializers.ModelSerializer):
     country = CountrySerializer()
 
     class Meta:
-        model = City
-        fields = ['name', 'country']
+        model = Province
+        fields = '__all__'
 
 
 class HotelSerializer(serializers.ModelSerializer):
-    city = CityDetailSerializer()
+    province = ProvinceSerializer()
 
     class Meta:
         model = Hotel
-        fields = ['id', 'name', 'phone_number', 'average_rating', 'email', 'image', 'city']
+        fields = ['id', 'name', 'phone_number', 'average_rating', 'email', 'image', 'province']
 
 
 class RoomSerializer(serializers.ModelSerializer):
@@ -87,11 +93,10 @@ class DetailRoomSerializer(serializers.ModelSerializer):
 
 
 class DetailHotelSerializer(serializers.ModelSerializer):
-    city = CityDetailSerializer()
     features = FeatureNameSerializer(many=True)
     room_set = DetailRoomSerializer(many=True)
 
     class Meta:
         model = Hotel
-        fields = ['id', 'name', 'address', 'description', 'phone_number', 'average_rating', 'email', 'image', 'city',
+        fields = ['id', 'name', 'address', 'description', 'phone_number', 'average_rating', 'email', 'image',
                   'features', 'room_set']

@@ -41,7 +41,7 @@ def is_room_available(room, check_in_date, check_out_date):
     return not existing_bookings.exists()
 
 
-def days_available(room, year, month):
+def days_available_of_room(room, year, month):
     # Check if the room is available for the specified dates
     start_date = date(year, month, 1)  # Create the first day of the month
     end_date = start_date + timedelta(

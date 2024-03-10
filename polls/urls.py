@@ -20,11 +20,19 @@ urlpatterns = [
 
     path('room-type/', views.room_type_list_view, name='room_type_list_view'),
     path('room-type/create/', views.room_type_create_view, name='room_type_create_view'),
+    path('room-type/<str:pk>/', views.room_type_detail_view, name='room_type_detail_view'),
     path('room-type/<str:pk>/edit/', views.room_type_edit_view, name='room_type_edit_view'),
     path('room-type/<str:pk>/delete/', views.room_type_delete_view, name='room_type_delete_view'),
 
+    path('province/', views.province_list_view, name='province'),
+    path('province/create/', views.province_create_view, name='create_province'),
+    path('province/<int:pk>/', views.province_detail_view, name='detail_province'),
+    path('province/<int:pk>/edit/', views.province_edit_view, name='edit_province'),
+    path('province/<int:pk>/delete/', views.province_delete_view, name='delete_province'),
+
     path('feature/', views.feature_list_view, name='feature_list_view'),
     path('feature/create/', views.feature_create_view, name='feature_create_view'),
+    path('feature/<str:pk>/', views.feature_detail_view, name='feature_detail_view'),
     path('feature/<str:pk>/edit/', views.feature_edit_view, name='feature_edit_view'),
     path('feature/<str:pk>/delete/', views.feature_delete_view, name='feature_delete_view'),
 
@@ -57,6 +65,6 @@ urlpatterns = [
     path('booking/create/', views.make_booking_view, name="make_booking"),
     path('booking/cancel/<int:pk>/', views.cancel_booking_view, name="cancel_booking"),
 
-    path('search/', views.search_view, name="search"),
-    path('is-available/', views.days_room_available_view, name="is_room_available"),
+    path('search/', views.search_hotel_view, name="search"),
+    path('days-available/', views.days_room_available_view, name="is_room_available"),
 ]

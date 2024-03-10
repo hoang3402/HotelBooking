@@ -1,3 +1,5 @@
+from datetime import datetime, timedelta
+
 from rest_framework import viewsets, status
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
@@ -6,7 +8,7 @@ from rest_framework.views import APIView
 from HotelBooking.settings import API_KEY_EXCHANGE_CURRENCY
 from polls.auth.views import StaffPermission, AdminPermission
 from polls.serializers import *
-from polls.utilities import calculate_total_cost, get_exchange_rate, days_available, is_room_available
+from polls.utilities import calculate_total_cost, get_exchange_rate, days_available_of_room, is_room_available
 
 
 # Hotel
@@ -70,6 +72,7 @@ class RoomTypeViewSet(viewsets.ModelViewSet):
     serializer_class = RoomTypeSerializer
     permission_classes_by_action = {
         'list': [AllowAny],
+        'retrieve': [AllowAny],
         'create': [StaffPermission, AdminPermission],
         'update': [StaffPermission, AdminPermission],
         'partial_update': [StaffPermission, AdminPermission],
@@ -78,6 +81,7 @@ class RoomTypeViewSet(viewsets.ModelViewSet):
 
 
 room_type_list_view = RoomTypeViewSet.as_view({'get': 'list'})
+room_type_detail_view = RoomTypeViewSet.as_view({'get': 'retrieve'})
 room_type_create_view = RoomTypeViewSet.as_view({'post': 'create'})
 room_type_edit_view = RoomTypeViewSet.as_view({'put': 'update', 'patch': 'partial_update'})
 room_type_delete_view = RoomTypeViewSet.as_view({'delete': 'destroy'})
@@ -90,6 +94,7 @@ class FeatureViewSet(viewsets.ModelViewSet):
     serializer_class = FeatureSerializer
     permission_classes_by_action = {
         'list': [AllowAny],
+        'retrieve': [AllowAny],
         'create': [StaffPermission, AdminPermission],
         'update': [StaffPermission, AdminPermission],
         'partial_update': [StaffPermission, AdminPermission],
@@ -98,6 +103,7 @@ class FeatureViewSet(viewsets.ModelViewSet):
 
 
 feature_list_view = FeatureViewSet.as_view({'get': 'list'})
+feature_detail_view = FeatureViewSet.as_view({'get': 'retrieve'})
 feature_create_view = FeatureViewSet.as_view({'post': 'create'})
 feature_edit_view = FeatureViewSet.as_view({'put': 'update', 'patch': 'partial_update'})
 feature_delete_view = FeatureViewSet.as_view({'delete': 'destroy'})
@@ -194,40 +200,6 @@ staff_booking_edit_view = BookingViewSet.as_view({'put': 'update', 'patch': 'par
 staff_booking_delete_view = BookingViewSet.as_view({'delete': 'destroy'})
 
 
-class Search(APIView):
-    permission_classes = [AllowAny]
-
-    def post(self, request):
-        # Get data from the POST request
-        number_adults = request.data.get('adults', None)
-        number_children = request.data.get('children', None)
-        country_code = request.data.get('country', None)
-        city_code = request.data.get('city', None)
-
-        queryset = Hotel.objects.all()
-
-        if number_adults:
-            queryset = queryset.filter(room__adults__gte=number_adults)
-
-        if number_children:
-            queryset = queryset.filter(room__children__gte=number_children)
-
-        if country_code:  # Update variable name
-            queryset = queryset.filter(city__country__code=country_code)
-
-        if city_code:
-            queryset = queryset.filter(city__code=city_code)
-
-        # Serialize the queryset
-        serializer = HotelSerializer(queryset, many=True)
-
-        # Return the serialized data as JSON response
-        return Response(serializer.data)
-
-
-search_view = Search.as_view()
-
-
 class ViewBookings(APIView):
     permission_classes = [IsAuthenticated]
 
@@ -266,7 +238,7 @@ class MakeBooking(APIView):
                 return Response({"error": "Room not available for the specified dates."},
                                 status=status.HTTP_400_BAD_REQUEST)
 
-            hotel_currency = room.hotel.city.country.currency
+            hotel_currency = room.hotel.province.country.currency
             exchange_rate = 1
             if currency != hotel_currency:
                 exchange_rate = get_exchange_rate(API_KEY_EXCHANGE_CURRENCY, hotel_currency, currency)
@@ -374,7 +346,7 @@ class DaysRoomAvailableBooking(APIView):
                 return Response({"error": "Room not available."},
                                 status=status.HTTP_400_BAD_REQUEST)
 
-            is_available = days_available(room, year, month)
+            is_available = days_available_of_room(room, year, month)
             return Response({"days": is_available}, status=status.HTTP_200_OK)
         except Room.DoesNotExist:
             return Response({"error": "Room not found."}, status=status.HTTP_404_NOT_FOUND)
@@ -398,3 +370,93 @@ class ToggleRoomAvailability(APIView):
 
 
 toggle_room_availability_view = ToggleRoomAvailability.as_view()
+
+
+# Province
+
+class ProvinceViewSet(viewsets.ModelViewSet):
+    queryset = Country.objects.all()
+    serializer_class = CountrySerializer
+    permission_classes_by_action = {
+        'list': [AllowAny],
+        'retrieve': [AllowAny],
+        'create': [StaffPermission, AdminPermission],
+        'update': [StaffPermission, AdminPermission],
+        'partial_update': [StaffPermission, AdminPermission],
+        'destroy': [AdminPermission]
+    }
+
+
+province_list_view = ProvinceViewSet.as_view({'get': 'list'})
+province_detail_view = ProvinceViewSet.as_view({'get': 'retrieve'})
+province_create_view = ProvinceViewSet.as_view({'post': 'create'})
+province_edit_view = ProvinceViewSet.as_view({'put': 'update', 'patch': 'partial_update'})
+province_delete_view = ProvinceViewSet.as_view({'delete': 'destroy'})
+
+
+#
+
+class SearchHotel(APIView):
+    permission_classes = [AllowAny]
+
+    def post(self, request):
+        try:
+            keyword = request.data.get('keyword')
+            city = request.data.get('city')
+            country = request.data.get('country')
+            province = request.data.get('province')
+            numbers_adults = request.data.get('adults')
+            numbers_children = request.data.get('children')
+            check_in_date = request.data.get('check_in_date')
+            check_out_date = request.data.get('check_out_date')
+
+            if check_in_date is None or check_out_date is None or check_in_date == '' or check_out_date == '':
+                check_in_date = datetime.now()
+                check_out_date = datetime.now() + timedelta(days=1)
+
+            if numbers_adults is None:
+                return Response({"error": "Number of adults are required."},
+                                status=status.HTTP_400_BAD_REQUEST)
+
+            hotel_instance = Hotel.objects.all()
+
+            if city:
+                hotel_instance = hotel_instance.filter(province__city__code=city)
+
+            if country:
+                hotel_instance = hotel_instance.filter(province__country__code=country)
+
+            if province:
+                hotel_instance = hotel_instance.filter(province=province)
+
+            if numbers_adults:
+                hotel_instance = hotel_instance.filter(room__adults__gte=numbers_adults)
+
+            if numbers_children:
+                hotel_instance = hotel_instance.filter(room__children__gte=numbers_children)
+
+            if keyword:
+                hotel_instance = hotel_instance.filter(name__icontains=keyword)
+
+            available_hotels = []
+            for hotel in hotel_instance:
+                rooms = hotel.room_set.all()
+                for room in rooms:
+                    if is_room_available(room, check_in_date, check_out_date):
+                        available_hotels.append(hotel)
+                        break
+
+            serializer = HotelSerializer(available_hotels, many=True)
+
+            return Response({
+                "numbers": len(serializer.data),
+                "hotels": serializer.data
+            },
+                status=status.HTTP_200_OK)
+
+        except Exception as e:
+            return Response({"detail": str(e)},
+                            status=status.HTTP_400_BAD_REQUEST)
+
+
+search_hotel_view = SearchHotel.as_view()
