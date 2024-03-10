@@ -5,14 +5,14 @@
     - [x] Xem danh sách khách sạn
         - Có nhiều khách sạn trong hệ thống
         - Thông tin cơ bản về từng khách sạn, bao gồm tên, địa chỉ và giá cả theo loại phòng
-    - [ ] Tìm kiếm khách sạn
+    - [x] Tìm kiếm khách sạn
         - Có thể tìm kiếm theo tiêu chí như địa điểm (tên phòng, thành phố, tỉnh...), ngày nhận phòng, ngày trả phòng,
           và số lượng người.
         - Người dùng xem được số lượng các khách sạn thoã mãn những tiêu chí nhất định
-    - [ ] Xem Chi tiết khách sạn
+    - [x] Xem Chi tiết khách sạn
         - Khi người dùng chọn một khách sạn từ danh sách tìm kiếm, họ có thể xem thông tin chi tiết về từng khách sạn.
         - Thông tin chi tiết bao gồm mô tả, hình ảnh, tiện nghi, giá cả, và thông tin về các loại phòng có sẵn
-    - [ ] Đặt Phòng
+    - [x] Đặt Phòng
         - cần chọn ngày nhận phòng, ngày trả phòng, số lượng người, và loại phòng
     - [ ] Xác nhận Đặt Phòng
         - Sau khi hoàn thành việc đặt phòng, hệ thống sẽ xác nhận đặt phòng và gửi thông tin phiếu xác nhận đặt phòng
