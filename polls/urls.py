@@ -44,11 +44,13 @@ urlpatterns = [
 
     path('city/', views.city_list_view, name='city_list_view'),
     path('city/create/', views.city_create_view, name='city_create_view'),
+    path('city/<str:pk>/', views.city_detail_view, name='city_detail_view'),
     path('city/<str:pk>/edit/', views.city_edit_view, name='city_edit_view'),
     path('city/<str:pk>/delete/', views.city_delete_view, name='city_delete_view'),
 
     path('country/', views.country_list_view, name='country_list_view'),
     path('country/create/', views.country_create_view, name='country_create_view'),
+    path('country/<str:pk>/', views.country_detail_view, name='country_detail_view'),
     path('country/<str:pk>/edit/', views.country_edit_view, name='country_edit_view'),
     path('country/<str:pk>/delete/', views.country_delete_view, name='country_delete_view'),
 

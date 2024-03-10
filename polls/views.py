@@ -152,6 +152,7 @@ class CityViewSet(viewsets.ModelViewSet):
 
 
 city_list_view = CityViewSet.as_view({'get': 'list'})
+city_detail_view = CityViewSet.as_view({'get': 'retrieve'})
 city_create_view = CityViewSet.as_view({'post': 'create'})
 city_edit_view = CityViewSet.as_view({'put': 'update', 'patch': 'partial_update'})
 city_delete_view = CityViewSet.as_view({'delete': 'destroy'})
@@ -173,6 +174,7 @@ class CountryViewSet(viewsets.ModelViewSet):
 
 
 country_list_view = CountryViewSet.as_view({'get': 'list'})
+country_detail_view = CountryViewSet.as_view({'get': 'retrieve'})
 country_create_view = CountryViewSet.as_view({'post': 'create'})
 country_edit_view = CountryViewSet.as_view({'put': 'update', 'patch': 'partial_update'})
 country_delete_view = CountryViewSet.as_view({'delete': 'destroy'})
@@ -392,8 +394,6 @@ province_create_view = ProvinceViewSet.as_view({'post': 'create'})
 province_edit_view = ProvinceViewSet.as_view({'put': 'update', 'patch': 'partial_update'})
 province_delete_view = ProvinceViewSet.as_view({'delete': 'destroy'})
 
-
-#
 
 class SearchHotel(APIView):
     permission_classes = [AllowAny]
