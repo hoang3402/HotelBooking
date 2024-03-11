@@ -25,7 +25,7 @@ API_KEY_EXCHANGE_CURRENCY = '7aa01f8cdamsh18ce574fb6df7fbp110df3jsn7d64d0db076b'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['localhost', 'hotel-tma.zeabur.app']
+ALLOWED_HOSTS = ['localhost', 'hotel-tma.zeabur.app', '127.0.0.1']
 
 CORS_ORIGIN_ALLOW_ALL = False
 CORS_ORIGIN_WHITELIST = (
