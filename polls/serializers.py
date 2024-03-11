@@ -101,9 +101,9 @@ class DetailRoomSerializer(serializers.ModelSerializer):
 class DetailHotelSerializer(serializers.ModelSerializer):
     features = FeatureNameSerializer(many=True)
     room_set = DetailRoomSerializer(many=True)
-    province = ProvinceNameSerializer()
+    province = ProvinceSerializer()
 
     class Meta:
         model = Hotel
-        fields = ['id', 'name', 'address', 'description', 'phone_number', 'average_rating', 'email', 'image',
-                  'features', 'room_set', 'province']
+        fields = ['id', 'name', 'address', 'description', 'province', 'phone_number', 'average_rating', 'email',
+                  'image', 'features', 'room_set']
