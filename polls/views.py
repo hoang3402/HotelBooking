@@ -376,8 +376,8 @@ toggle_room_availability_view = ToggleRoomAvailability.as_view()
 # Province
 
 class ProvinceViewSet(viewsets.ModelViewSet):
-    queryset = Country.objects.all()
-    serializer_class = CountrySerializer
+    queryset = Province.objects.all()
+    serializer_class = ProvinceSerializer
     permission_classes_by_action = {
         'list': [AllowAny],
         'retrieve': [AllowAny],
