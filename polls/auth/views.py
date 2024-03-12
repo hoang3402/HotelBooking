@@ -7,7 +7,7 @@ from rest_framework.views import APIView
 from rest_framework_simplejwt.authentication import JWTAuthentication
 from rest_framework_simplejwt.tokens import RefreshToken
 
-from polls.auth.serializers import UserSerializer
+from polls.auth.serializers import UserSerializer, get_tokens_for_user
 from polls.models import User
 
 
@@ -40,11 +40,11 @@ class UserCreateViewSet(generics.CreateAPIView):
         response = super(UserCreateViewSet, self).create(request, *args, **kwargs)
         user_data = response.data
         user = User.objects.get(pk=user_data['id'])
-        refresh = RefreshToken.for_user(user)
+        token = get_tokens_for_user(user)
 
         return Response({
-            'refresh': str(refresh),
-            'access': str(refresh.access_token),
+            'refresh': token['refresh'],
+            'access': token['access'],
             'user': user_data
         })
 
@@ -69,11 +69,11 @@ class UserLoginViewSet(APIView):
                 raise AuthenticationFailed('Invalid username or password.')
 
             login(request, user)
-            refresh = RefreshToken.for_user(user)
+            token = get_tokens_for_user(user)
 
             response_data = {
-                'refresh': str(refresh),
-                'access': str(refresh.access_token),
+                'refresh': token['refresh'],
+                'access': token['access'],
                 'user': UserSerializer(user).data,
             }
 
@@ -162,3 +162,21 @@ class CheckPermissionAPI(APIView):
 
 
 check_permission = CheckPermissionAPI.as_view()
+
+
+class LogoutAPI(APIView):
+    authentication_classes = [JWTAuthentication]
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request):
+        try:
+            refresh_token = request.data["refresh"]
+            token = RefreshToken(refresh_token)
+            token.blacklist()
+            return Response(status=status.HTTP_205_RESET_CONTENT)
+        except Exception as e:
+            print(e)
+            return Response(status=status.HTTP_400_BAD_REQUEST)
+
+
+user_logout_view = LogoutAPI.as_view()

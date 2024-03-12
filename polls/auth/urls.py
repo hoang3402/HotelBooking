@@ -22,6 +22,7 @@ from . import views
 urlpatterns = [
     path('register/', views.user_create_view, name='register'),
     path('login/', views.user_login_view, name='login'),
+    path('logout/', views.user_logout_view, name='login'),
     path('token/refresh/', views.refresh_token_view, name='token_refresh'),
     path('token/verify/', TokenVerifyView.as_view(), name='token_verify'),
     path('token/test/', views.test_token, name='token_test'),
