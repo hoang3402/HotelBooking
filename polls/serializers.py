@@ -75,17 +75,28 @@ class SpecificHotelFeatureSerializer(serializers.ModelSerializer):
 
 class BookingSerializer(serializers.ModelSerializer):
     hotel = serializers.SerializerMethodField()
+    room = serializers.SerializerMethodField()
 
     def get_hotel(self, obj):
         # obj đại diện cho instance Booking hiện tại
         return {
             'id': obj.hotel.id,
-            'name': obj.hotel.name
+            'name': obj.hotel.name,
+            'image': obj.hotel.image
+        }
+
+    def get_room(self, obj):
+        return {
+            'id': obj.room.id,
+            'name': obj.room.name,
+            'adults': obj.room.adults,
+            'children': obj.room.children
         }
 
     class Meta:
         model = Booking
-        fields = '__all__'
+        # fields = '__all__'
+        exclude = ['user']
 
 
 class BookingDetailsSerializer(serializers.ModelSerializer):
