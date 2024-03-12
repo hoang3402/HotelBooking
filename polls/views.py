@@ -283,6 +283,35 @@ class MakeBooking(APIView):
 make_booking_view = MakeBooking.as_view()
 
 
+class BookingPriceView(APIView):
+    permission_classes = [AllowAny]
+
+    def post(self, request):
+        try:
+            room_id = request.data.get('room_id')
+            check_in_date = request.data.get('check_in_date')
+            check_out_date = request.data.get('check_out_date')
+            currency = request.data.get('currency', 'USD')
+
+            room = Room.objects.get(id=room_id)
+            hotel_currency = room.hotel.province.country.currency
+            exchange_rate = 1
+            if currency != hotel_currency:
+                exchange_rate = get_exchange_rate(API_KEY_EXCHANGE_CURRENCY, hotel_currency, currency)
+                if exchange_rate is None:
+                    return Response({"error": "Failed to retrieve exchange rate."},
+                                    status=status.HTTP_400_BAD_REQUEST)
+
+            price = calculate_total_cost(check_in_date, check_out_date, room.price, exchange_rate)
+
+            return Response({"price": price}, status=status.HTTP_200_OK)
+        except Exception as e:
+            return Response({"detail": str(e)}, status=status.HTTP_400_BAD_REQUEST)
+
+
+view_booking_price_view = BookingPriceView.as_view()
+
+
 class ViewBooking(APIView):
     permission_classes = [IsAuthenticated]
 
