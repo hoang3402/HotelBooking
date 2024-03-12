@@ -19,9 +19,9 @@
           đến email của người dùng đã đăng ký.
           Thông tin trong phiếu xác nhận bao gồm chi tiết về đặt phòng và thông tin liên hệ của khách sạn.
         - Đã có thể gửi email (đã báo thành công) nhưng không nhận được mail từ cả phía gửi lẫn phía nhận
-    - [ ] Quản lý đặt phòng
+    - [x] Quản lý đặt phòng
         - Xem, huỷ đặt phòng hiện tại
-    - [ ] Xem lịch sử đặt phòng
+    - [x] Xem lịch sử đặt phòng
         - Lịch sử đặt phòng bao gồm thông tin về các đặt phòng hiện tại và các đặt phòng trước đây mà họ đã thực hiện.
     - [ ] Đánh giá
         - Có thể đánh giá, comment cho khách sạn họ đã lưu trú
