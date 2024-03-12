@@ -1,6 +1,5 @@
 from rest_framework import serializers
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
-from rest_framework_simplejwt.tokens import RefreshToken
 
 from polls.models import User
 
@@ -22,13 +21,19 @@ class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
     def get_token(cls, user):
         token = super().get_token(user)
 
-        token['email'] = user.get_email_field_name()
+        token['role'] = 'user'
+
+        if user.is_staff:
+            token['role'] = 'staff'
+
+        if user.is_superuser:
+            token['role'] = 'admin'
 
         return token
 
 
 def get_tokens_for_user(user):
-    refresh = RefreshToken.for_user(user)
+    refresh = MyTokenObtainPairSerializer.get_token(user)
 
     return {
         'refresh': str(refresh),
