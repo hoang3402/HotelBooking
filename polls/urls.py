@@ -69,4 +69,7 @@ urlpatterns = [
 
     path('search/', views.search_hotel_view, name="search"),
     path('days-available/', views.days_room_available_view, name="is_room_available"),
+
+    # Email
+    path('send-email/', views.send_email_view, name="send_email"),
 ]

@@ -1,5 +1,7 @@
 from datetime import datetime, timedelta
 
+from django.conf import settings
+from django.core.mail import send_mail
 from rest_framework import viewsets, status
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
@@ -459,3 +461,25 @@ class SearchHotel(APIView):
 
 
 search_hotel_view = SearchHotel.as_view()
+
+
+class SendEmail(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request):
+        try:
+            subject = 'welcome'
+            message = f'test email'
+            user = request.user
+            email_from = settings.EMAIL_HOST_USER
+            recipient_list = [user.email]
+            send_mail(subject, message, email_from, recipient_list, fail_silently=False)
+
+            return Response({"message": "Email sent successfully. to {}".format(user.email)},
+                            status=status.HTTP_200_OK)
+        except Exception as e:
+            return Response({"detail": str(e)},
+                            status=status.HTTP_400_BAD_REQUEST)
+
+
+send_email_view = SendEmail.as_view()

@@ -18,6 +18,7 @@
         - Sau khi hoàn thành việc đặt phòng, hệ thống sẽ xác nhận đặt phòng và gửi thông tin phiếu xác nhận đặt phòng
           đến email của người dùng đã đăng ký.
           Thông tin trong phiếu xác nhận bao gồm chi tiết về đặt phòng và thông tin liên hệ của khách sạn.
+        - Đã có thể gửi email (đã báo thành công) nhưng không nhận được mail từ cả phía gửi lẫn phía nhận
     - [ ] Quản lý đặt phòng
         - Xem, huỷ đặt phòng hiện tại
     - [ ] Xem lịch sử đặt phòng
