@@ -187,14 +187,7 @@ country_delete_view = CountryViewSet.as_view({'delete': 'destroy'})
 class BookingViewSet(viewsets.ModelViewSet):
     queryset = Booking.objects.all()
     serializer_class = BookingSerializer
-    permission_classes_by_action = {
-        'list': [StaffPermission, AdminPermission],
-        'retrieve': [StaffPermission, AdminPermission],
-        'create': [StaffPermission, AdminPermission],
-        'update': [StaffPermission, AdminPermission],
-        'partial_update': [StaffPermission, AdminPermission],
-        'destroy': [AdminPermission]
-    }
+    permission_classes = [StaffPermission]
 
 
 staff_booking_list_view = BookingViewSet.as_view({'get': 'list'})
@@ -440,7 +433,10 @@ class SearchHotel(APIView):
             check_in_date = request.data.get('check_in_date')
             check_out_date = request.data.get('check_out_date')
 
-            if check_in_date is None or check_out_date is None or check_in_date == '' or check_out_date == '':
+            if (check_in_date is None or
+                    check_out_date is None or
+                    check_in_date == '' or
+                    check_out_date == ''):
                 check_in_date = datetime.now()
                 check_out_date = datetime.now() + timedelta(days=1)
 
