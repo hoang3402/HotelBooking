@@ -28,8 +28,8 @@
 
 
 - **Chức năng của Quản trị viên**:
-    - [ ] Quản lý lịch đặt phòng
-        - [ ] Xem và quản lý việc đặt phòng
+    - [x] Quản lý lịch đặt phòng
+        - [x] Xem và quản lý việc đặt phòng
         - Bao gồm xác nhận đặt phòng, hủy bỏ đặt phòng, và sửa đổi thông tin đặt phòng.
 
 
