@@ -43,7 +43,7 @@ def get_tokens_for_user(user):
 
 
 class StaffPermission(BasePermission):
-    message = 'Only staff members can access this endpoint.'
+    message = 'You can\'t access this endpoint.'
 
     def has_permission(self, request, view):
         if view.action in ['list', 'retrieve', 'update', 'partial_update', 'create']:

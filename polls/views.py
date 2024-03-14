@@ -145,7 +145,6 @@ class BookingViewSet(viewsets.ModelViewSet):
 
 staff_booking_list_view = BookingViewSet.as_view({'get': 'list'})
 staff_booking_detail_view = BookingViewSet.as_view({'get': 'retrieve'})
-staff_booking_create_view = BookingViewSet.as_view({'post': 'create'})
 staff_booking_edit_view = BookingViewSet.as_view({'put': 'update', 'patch': 'partial_update'})
 staff_booking_delete_view = BookingViewSet.as_view({'delete': 'destroy'})
 
