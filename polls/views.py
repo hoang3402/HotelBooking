@@ -147,27 +147,20 @@ staff_booking_edit_view = BookingViewSet.as_view({'put': 'update', 'patch': 'par
 staff_booking_delete_view = BookingViewSet.as_view({'delete': 'destroy'})
 
 
-class ViewBookings(APIView):
+class ViewBookings(viewsets.ModelViewSet):
     permission_classes = [IsAuthenticated]
 
-    def get(self, request):
-        bookings = Booking.objects.filter(user=request.user)
+    def retrieve(self, *args, **kwargs):
+        bookings = Booking.objects.filter(user=self.request.user)
         serializer = BookingSerializer(bookings, many=True)
         return Response(serializer.data)
 
-
-view_bookings_view = ViewBookings.as_view()
-
-
-class MakeBooking(APIView):
-    permission_classes = [IsAuthenticated]
-
-    def post(self, request):
-        user = request.user
-        room_id = request.data.get('room_id')
-        check_in_date = request.data.get('check_in_date')
-        check_out_date = request.data.get('check_out_date')
-        currency = request.data.get('currency', 'USD')
+    def create(self, *args, **kwargs):
+        user = self.request.user
+        room_id = self.request.data.get('room_id')
+        check_in_date = self.request.data.get('check_in_date')
+        check_out_date = self.request.data.get('check_out_date')
+        currency = self.request.data.get('currency', 'USD')
 
         if (check_in_date or check_out_date) is None:
             return Response({"error": "Check-in and check-out dates are required."},
@@ -223,7 +216,8 @@ class MakeBooking(APIView):
                             status=status.HTTP_400_BAD_REQUEST)
 
 
-make_booking_view = MakeBooking.as_view()
+view_bookings_view = ViewBookings.as_view({'get': 'retrieve'})
+make_booking_view = ViewBookings.as_view({'post': 'create'})
 
 
 class BookingPriceView(APIView):

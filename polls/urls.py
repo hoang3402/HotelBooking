@@ -62,7 +62,7 @@ urlpatterns = [
 
     # Booking for customer
     path('booking/', views.view_bookings_view, name="booking_list_view"),
-    path('booking/', views.make_booking_view, name="make_booking"),
+    path('booking/create/', views.make_booking_view, name="make_booking"),
     path('booking/<int:pk>/', views.view_booking_view, name="booking_detail_view"),
     path('booking/price/', views.view_booking_price_view, name="booking_price_view"),
     path('booking/cancel/<int:pk>/', views.cancel_booking_view, name="cancel_booking"),
