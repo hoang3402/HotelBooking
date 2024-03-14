@@ -73,17 +73,13 @@ class UserPermission(BasePermission):
     def has_permission(self, request, view):
         if view.action in ['retrieve', 'list']:
             return True
-        elif view.action == 'create':
-            return request.user.is_authenticated() and request.user.is_superuser
-        elif view.action in ['update', 'partial_update']:
-            return request.user.is_authenticated() and (request.user.is_staff or request.user.is_superuser)
+        elif view.action in ['create', 'update', 'partial_update']:
+            return request.user.is_staff or request.user.is_superuser
         else:
             return request.user.is_superuser
 
     def has_object_permission(self, request, view, obj):
         # Deny actions on objects if the user is not authenticated
-        if not request.user.is_authenticated():
-            return False
 
         if view.action in ['list', 'retrieve']:
             return True
