@@ -1,34 +1,14 @@
 from django.contrib.auth import authenticate, login
 from rest_framework import generics, response, status
 from rest_framework.exceptions import AuthenticationFailed
-from rest_framework.permissions import AllowAny, IsAuthenticated, BasePermission
+from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework_simplejwt.authentication import JWTAuthentication
 from rest_framework_simplejwt.tokens import RefreshToken
 
-from polls.auth.serializers import UserSerializer, get_tokens_for_user
+from polls.auth.serializers import UserSerializer, get_tokens_for_user, AdminPermission
 from polls.models import User
-
-
-class StaffPermission(BasePermission):
-    message = 'Only staff members can access this endpoint.'
-
-    def has_permission(self, request, view):
-        return request.user.is_staff
-
-    def has_object_permission(self, request, view, obj):
-        return request.user.is_staff
-
-
-class AdminPermission(BasePermission):
-    message = 'Only Admin can access this endpoint.'
-
-    def has_permission(self, request, view):
-        return request.user.is_superuser
-
-    def has_object_permission(self, request, view, obj):
-        return request.user.is_superuser
 
 
 class UserCreateViewSet(generics.CreateAPIView):
@@ -102,7 +82,7 @@ class RefreshTokenViewSet(APIView):
                 'access': str(refresh.access_token),
             }, status=status.HTTP_200_OK)
 
-        except Exception:
+        except Exception as e:
             return response.Response({'error': 'An internal error occurred.'},
                                      status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
