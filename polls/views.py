@@ -8,7 +8,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from HotelBooking.settings import API_KEY_EXCHANGE_CURRENCY
-from polls.auth.serializers import UserPermission, StaffPermission, AdminPermission
+from polls.auth.serializers import UserPermission, StaffPermission
 from polls.serializers import *
 from polls.utilities import calculate_total_cost, get_exchange_rate, days_available_of_room, is_room_available
 
@@ -20,11 +20,10 @@ class HotelViewSet(viewsets.ModelViewSet):
     serializer_class = HotelSerializer
     permission_classes = [UserPermission]
 
-
-def retrieve(self, request, *args, **kwargs):
-    instance = self.get_object()
-    serializer = DetailHotelSerializer(instance)
-    return Response(serializer.data)
+    def retrieve(self, request, *args, **kwargs):
+        instance = self.get_object()
+        serializer = DetailHotelSerializer(instance)
+        return Response(serializer.data)
 
 
 hotel_list_view = HotelViewSet.as_view({'get': 'list'})
@@ -41,11 +40,10 @@ class RoomViewSet(viewsets.ModelViewSet):
     serializer_class = RoomSerializer
     permission_classes = [UserPermission]
 
-
-def retrieve(self, request, *args, **kwargs):
-    instance = self.get_object()
-    serializer = DetailRoomSerializer(instance)
-    return Response(serializer.data)
+    def retrieve(self, request, *args, **kwargs):
+        instance = self.get_object()
+        serializer = DetailRoomSerializer(instance)
+        return Response(serializer.data)
 
 
 room_list_view = RoomViewSet.as_view({'get': 'list'})
