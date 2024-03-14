@@ -46,16 +46,16 @@ class StaffPermission(BasePermission):
     message = 'You can\'t access this endpoint.'
 
     def has_permission(self, request, view):
-        if view.action in ['list', 'retrieve', 'update', 'partial_update', 'create']:
-            return request.user.is_staff
-        else:
+        if view.action == 'destroy':
             return request.user.is_superuser
+        else:
+            return request.user.is_staff
 
     def has_object_permission(self, request, view, obj):
-        if view.action in ['list', 'retrieve', 'update', 'partial_update', 'create']:
-            return request.user.is_staff
-        else:
+        if view.action == 'destroy':
             return request.user.is_superuser
+        else:
+            return request.user.is_staff
 
 
 class AdminPermission(BasePermission):
