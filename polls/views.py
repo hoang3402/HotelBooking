@@ -25,6 +25,13 @@ class HotelViewSet(viewsets.ModelViewSet):
         serializer = DetailHotelSerializer(instance)
         return Response(serializer.data)
 
+    def create(self, request, *args, **kwargs):
+        serializer = CreateHotelSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        self.perform_create(serializer)
+        headers = self.get_success_headers(serializer.data)
+        return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
+
 
 hotel_list_view = HotelViewSet.as_view({'get': 'list'})
 hotel_detail_view = HotelViewSet.as_view({'get': 'retrieve'})

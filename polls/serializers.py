@@ -49,6 +49,14 @@ class HotelSerializer(serializers.ModelSerializer):
         fields = ['id', 'name', 'phone_number', 'average_rating', 'email', 'image', 'province']
 
 
+class CreateHotelSerializer(serializers.ModelSerializer):
+    province = serializers.PrimaryKeyRelatedField(queryset=Province.objects.all())
+
+    class Meta:
+        model = Hotel
+        fields = ['id', 'name', 'phone_number', 'average_rating', 'email', 'image', 'province']
+
+
 class RoomSerializer(serializers.ModelSerializer):
     class Meta:
         model = Room
