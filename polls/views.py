@@ -32,6 +32,14 @@ class HotelViewSet(viewsets.ModelViewSet):
         headers = self.get_success_headers(serializer.data)
         return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
 
+    def partial_update(self, request, *args, **kwargs):
+        instance = self.get_object()
+        serializer = CreateHotelSerializer(instance, data=request.data, partial=True)
+        serializer.is_valid(raise_exception=True)
+        self.perform_update(serializer)
+        headers = self.get_success_headers(serializer.data)
+        return Response(serializer.data, status=status.HTTP_200_OK, headers=headers)
+
 
 hotel_list_view = HotelViewSet.as_view({'get': 'list'})
 hotel_detail_view = HotelViewSet.as_view({'get': 'retrieve'})

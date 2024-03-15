@@ -54,7 +54,7 @@ class CreateHotelSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Hotel
-        fields = ['id', 'name', 'phone_number', 'average_rating', 'email', 'image', 'province']
+        fields = '__all__'
 
 
 class RoomSerializer(serializers.ModelSerializer):
