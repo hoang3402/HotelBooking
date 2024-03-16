@@ -3,6 +3,7 @@ from datetime import datetime, timedelta
 from django.conf import settings
 from django.core.mail import send_mail
 from rest_framework import viewsets, status
+from rest_framework.pagination import PageNumberPagination
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -396,7 +397,9 @@ class SearchHotel(APIView):
                 return Response({"error": "Number of adults are required."},
                                 status=status.HTTP_400_BAD_REQUEST)
 
-            hotel_instance = Hotel.objects.all()
+            hotel_instance = Hotel.objects.all().select_related('province__country')
+
+            hotel_instance = hotel_instance.filter(room__is_available=True)
 
             if city:
                 hotel_instance = hotel_instance.filter(province__city__code=city)
@@ -424,13 +427,13 @@ class SearchHotel(APIView):
                         available_hotels.append(hotel)
                         break
 
-            serializer = HotelSerializer(available_hotels, many=True)
+            # serializer = HotelSerializer(available_hotels, many=True)
 
-            return Response({
-                "numbers": len(serializer.data),
-                "hotels": serializer.data
-            },
-                status=status.HTTP_200_OK)
+            paginator = PageNumberPagination()
+            result_page = paginator.paginate_queryset(available_hotels, request)
+            serializer = HotelSerializer(result_page, many=True)
+
+            return paginator.get_paginated_response(serializer.data)
 
         except Exception as e:
             return Response({"detail": str(e)},
