@@ -14,6 +14,10 @@ from polls.serializers import *
 from polls.utilities import calculate_total_cost, get_exchange_rate, days_available_of_room, is_room_available
 
 
+class NoPagination(PageNumberPagination):
+    page_size = None  # Set page size to None to disable pagination
+
+
 # Hotel
 
 class HotelViewSet(viewsets.ModelViewSet):
@@ -75,6 +79,7 @@ class RoomTypeViewSet(viewsets.ModelViewSet):
     queryset = RoomType.objects.all()
     serializer_class = RoomTypeSerializer
     permission_classes = [UserPermission]
+    pagination_class = NoPagination
 
 
 room_type_list_view = RoomTypeViewSet.as_view({'get': 'list'})
@@ -105,6 +110,7 @@ class FeatureHotelViewSet(viewsets.ModelViewSet):
     queryset = SpecificHotelFeature.objects.all()
     serializer_class = SpecificHotelFeatureSerializer
     permission_classes = [UserPermission]
+    pagination_class = NoPagination
 
     def retrieve(self, *args, **kwargs):
         specific_hotel_features = SpecificHotelFeature.objects.filter(hotel=kwargs['pk'])
@@ -125,6 +131,7 @@ class CityViewSet(viewsets.ModelViewSet):
     queryset = City.objects.all()
     serializer_class = CitySerializer
     permission_classes = [UserPermission]
+    pagination_class = NoPagination
 
 
 city_list_view = CityViewSet.as_view({'get': 'list'})
@@ -140,6 +147,7 @@ class CountryViewSet(viewsets.ModelViewSet):
     queryset = Country.objects.all()
     serializer_class = CountrySerializer
     permission_classes = [UserPermission]
+    pagination_class = NoPagination
 
 
 country_list_view = CountryViewSet.as_view({'get': 'list'})
@@ -363,6 +371,7 @@ class ProvinceViewSet(viewsets.ModelViewSet):
     queryset = Province.objects.all()
     serializer_class = ProvinceSerializer
     permission_classes = [UserPermission]
+    pagination_class = NoPagination
 
 
 province_list_view = ProvinceViewSet.as_view({'get': 'list'})
