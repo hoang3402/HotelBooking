@@ -1,5 +1,5 @@
 from django.contrib.auth import authenticate, login
-from rest_framework import generics, response, status
+from rest_framework import generics, response, status, viewsets
 from rest_framework.exceptions import AuthenticationFailed
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
@@ -160,3 +160,15 @@ class LogoutAPI(APIView):
 
 
 user_logout_view = LogoutAPI.as_view()
+
+
+class UserViewSet(viewsets.ModelViewSet):
+    queryset = User.objects.all()
+    serializer_class = UserSerializer
+    permission_classes = [AdminPermission]
+
+
+users = UserViewSet.as_view({'get': 'list'})
+get_user = UserViewSet.as_view({'get': 'retrieve'})
+edit_user = UserViewSet.as_view({'patch': 'partial_update'})
+delete_user = UserViewSet.as_view({'delete': 'destroy'})

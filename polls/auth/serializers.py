@@ -7,10 +7,20 @@ from polls.models import User
 
 class UserSerializer(serializers.ModelSerializer):
     password = serializers.CharField(write_only=True)
+    role = serializers.SerializerMethodField()
+
+    def get_role(self, obj):
+        if obj.is_superuser:
+            return 'admin'
+
+        if obj.is_staff:
+            return 'staff'
+
+        return 'user'
 
     class Meta:
         model = User
-        fields = ['id', 'email', 'first_name', 'last_name', 'number_phone', 'password']
+        fields = ['id', 'email', 'first_name', 'last_name', 'number_phone', 'password', 'role']
 
     def create(self, validated_data):
         user = User.objects.create_user(**validated_data)
