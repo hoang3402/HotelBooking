@@ -103,11 +103,11 @@ class UserPermission(BasePermission):
 
 class CanViewAndEditOwn(BasePermission):
     def has_permission(self, request, view):
-        if view.action in ['list', 'retrieve']:
+        if view.action in ['list', 'retrieve', 'create']:
             return True
-        return request.user.is_authenticated
+        return request.user.is_superuser
 
     def has_object_permission(self, request, view, obj):
-        if view.action in ['list', 'retrieve']:
-            return True
-        return obj == request.user
+        if view.action in ['list', 'retrieve', 'create']:
+            return obj.author == request.user
+        return request.user.is_superuser

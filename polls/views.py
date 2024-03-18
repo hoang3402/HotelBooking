@@ -1,5 +1,6 @@
 from datetime import datetime, timedelta
 
+from django.shortcuts import get_object_or_404
 from rest_framework import viewsets, status
 from rest_framework.pagination import PageNumberPagination
 from rest_framework.permissions import AllowAny, IsAuthenticated
@@ -7,8 +8,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from HotelBooking.settings import API_KEY_EXCHANGE_CURRENCY
-from polls.auth.serializers import UserPermission, StaffPermission, CanViewAndEditOwn, AdminPermission
-from polls.models import Review
+from polls.auth.serializers import UserPermission, StaffPermission, CanViewAndEditOwn
 from polls.serializers import *
 from polls.utilities import calculate_total_cost, get_exchange_rate, days_available_of_room, is_room_available, \
     send_mail_confirmation
@@ -481,6 +481,28 @@ class CommentViewSet(viewsets.ModelViewSet):
     def get_queryset(self, *args, **kwargs):
         hotel_id = self.request.query_params.get('hotelId', None)
         return super().get_queryset().filter(hotel=hotel_id)
+
+    def create(self, request, *args, **kwargs):
+        booking_instance = get_object_or_404(Booking, id=request.data.get('booking'))
+        review = Review.objects.create(
+            rating=request.data.get('rating'),
+            title=request.data.get('title'),
+            comment=request.data.get('comment'),
+            booking=booking_instance,
+            hotel=booking_instance.hotel,
+            user=request.user
+        )
+        serializer = ReviewSerializer(review)
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+
+    def destroy(self, request, *args, **kwargs):
+        try:
+            review = Review.objects.get(id=kwargs['pk'])
+            review.delete()
+            return Response({"message": "Review deleted successfully."},
+                            status=status.HTTP_200_OK)
+        except Review.DoesNotExist:
+            return Response({"error": "Review not found."}, status=status.HTTP_404_NOT_FOUND)
 
 
 comment_list_view = CommentViewSet.as_view({'get': 'list'})
