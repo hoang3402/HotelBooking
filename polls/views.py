@@ -11,7 +11,7 @@ from HotelBooking.settings import API_KEY_EXCHANGE_CURRENCY
 from polls.auth.serializers import UserPermission, StaffPermission, CanViewAndEditOwn
 from polls.serializers import *
 from polls.utilities import calculate_total_cost, get_exchange_rate, days_available_of_room, is_room_available, \
-    send_mail_confirmation, NoPagination
+    send_mail_confirmation, NoPagination, CustomPagination
 
 
 # Hotel
@@ -455,7 +455,7 @@ class SearchHotel(APIView):
 
             # serializer = HotelSerializer(available_hotels, many=True)
 
-            paginator = PageNumberPagination()
+            paginator = CustomPagination()
             result_page = paginator.paginate_queryset(available_hotels, request)
             serializer = HotelSerializer(result_page, many=True)
 
