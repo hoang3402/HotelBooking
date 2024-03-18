@@ -11,11 +11,7 @@ from HotelBooking.settings import API_KEY_EXCHANGE_CURRENCY
 from polls.auth.serializers import UserPermission, StaffPermission, CanViewAndEditOwn
 from polls.serializers import *
 from polls.utilities import calculate_total_cost, get_exchange_rate, days_available_of_room, is_room_available, \
-    send_mail_confirmation
-
-
-class NoPagination(PageNumberPagination):
-    page_size = None  # Set page size to None to disable pagination
+    send_mail_confirmation, NoPagination
 
 
 # Hotel

@@ -6,6 +6,8 @@ import requests
 from django.core.mail import EmailMultiAlternatives
 from django.template.loader import render_to_string
 from django.utils.html import strip_tags
+from rest_framework.pagination import PageNumberPagination
+from rest_framework.response import Response
 
 from HotelBooking import settings
 from polls.models import Booking
@@ -99,3 +101,20 @@ def send_mail_confirmation(booking, user, room):
 
     message.attach_alternative(html_message, 'text/html')
     message.send()
+
+
+class NoPagination(PageNumberPagination):
+    page_size = None  # Set page size to None to disable pagination
+
+
+class CustomPagination(PageNumberPagination):
+    page_size = 12
+    page_size_query_param = 'page_size'
+
+    def get_paginated_response(self, data):
+        return Response({
+            'count': self.page.paginator.count,
+            'next': self.get_next_link(),
+            'previous': self.get_previous_link(),
+            'results': data
+        })
