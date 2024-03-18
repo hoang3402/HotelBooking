@@ -68,6 +68,11 @@ urlpatterns = [
     path('booking/price/', views.view_booking_price_view, name="booking_price_view"),
     path('booking/cancel/<int:pk>/', views.cancel_booking_view, name="cancel_booking"),
 
+    # Comment for customer after booking
+    path('comment/', views.comment_list_view, name="comment_list"),
+    path('comment/create/', views.create_comment_view, name="create_comment"),
+    path('comment/<int:pk>/delete/', views.delete_comment_view, name="delete_comment"),
+
     path('search/', views.search_hotel_view, name="search"),
     path('days-available/', views.days_room_available_view, name="is_room_available"),
 ]

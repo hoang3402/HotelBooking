@@ -7,7 +7,8 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from HotelBooking.settings import API_KEY_EXCHANGE_CURRENCY
-from polls.auth.serializers import UserPermission, StaffPermission
+from polls.auth.serializers import UserPermission, StaffPermission, CanViewAndEditOwn, AdminPermission
+from polls.models import Review
 from polls.serializers import *
 from polls.utilities import calculate_total_cost, get_exchange_rate, days_available_of_room, is_room_available, \
     send_mail_confirmation
@@ -470,3 +471,18 @@ class SearchHotel(APIView):
 
 
 search_hotel_view = SearchHotel.as_view()
+
+
+class CommentViewSet(viewsets.ModelViewSet):
+    queryset = Review.objects.all()
+    serializer_class = ReviewSerializer
+    permission_classes = [CanViewAndEditOwn]
+
+    def get_queryset(self, *args, **kwargs):
+        hotel_id = self.request.query_params.get('hotelId', None)
+        return super().get_queryset().filter(hotel=hotel_id)
+
+
+comment_list_view = CommentViewSet.as_view({'get': 'list'})
+create_comment_view = CommentViewSet.as_view({'post': 'create'})
+delete_comment_view = CommentViewSet.as_view({'delete': 'destroy'})
