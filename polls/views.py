@@ -1,7 +1,9 @@
 from datetime import datetime, timedelta
 
 from django.conf import settings
-from django.core.mail import send_mail
+from django.core.mail import send_mail, EmailMultiAlternatives
+from django.template.loader import render_to_string
+from django.utils.html import strip_tags
 from rest_framework import viewsets, status
 from rest_framework.pagination import PageNumberPagination
 from rest_framework.permissions import AllowAny, IsAuthenticated
@@ -457,12 +459,19 @@ class SendEmail(APIView):
 
     def post(self, request):
         try:
-            subject = 'welcome'
-            message = f'test email'
             user = request.user
-            email_from = settings.EMAIL_HOST_USER
-            recipient_list = [user.email]
-            send_mail(subject, message, email_from, recipient_list, fail_silently=False)
+
+            html_message = render_to_string('email.html', {'user': request.user})
+            plain_message = strip_tags(html_message)
+            message = EmailMultiAlternatives(
+                subject='Complete your registration',
+                body=plain_message,
+                from_email=settings.EMAIL_HOST_USER,
+                to=[user.email],
+            )
+
+            message.attach_alternative(html_message, 'text/html')
+            message.send()
 
             return Response({"message": "Email sent successfully. to {}".format(user.email)},
                             status=status.HTTP_200_OK)
