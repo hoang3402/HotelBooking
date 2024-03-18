@@ -2,6 +2,8 @@ from django.contrib.auth.base_user import AbstractBaseUser, BaseUserManager
 from django.contrib.auth.models import PermissionsMixin
 from django.db import models
 
+from polls.signal import update_booking_status
+
 
 class Country(models.Model):
     code = models.CharField(max_length=20, primary_key=True)
@@ -159,6 +161,10 @@ class Booking(models.Model):
     room = models.ForeignKey(Room, on_delete=models.CASCADE)
     hotel = models.ForeignKey(Hotel, on_delete=models.CASCADE)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
+
+    def save(self, *args, **kwargs):
+        super().save(*args, **kwargs)  # Lưu booking theo mặc định
+        update_booking_status(sender=self.__class__, instance=self)
 
     def __str__(self):
         return f'{self.id}'
