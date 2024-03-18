@@ -2,7 +2,7 @@
         "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html dir="ltr" xmlns="http://www.w3.org/1999/xhtml" xmlns:o="urn:schemas-microsoft-com:office:office" lang="en">
 <head>
-    <meta charset="UTF-8">
+    <meta charset="UTF-8" content="text/html">
     <meta content="width=device-width, initial-scale=1" name="viewport">
     <meta name="x-apple-disable-message-reformatting">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -271,7 +271,8 @@
                                                            style="mso-table-lspace:0pt;mso-table-rspace:0pt;border-collapse:collapse;border-spacing:0px">
                                                         <tr>
                                                             <td align="center" style="padding:0;Margin:0;font-size:0px">
-                                                                <a target="_blank" href="https://viewstripo.email"
+                                                                <a target="_blank"
+                                                                   href="https://github.com/hoang3402/HotelBookingFE"
                                                                    style="-webkit-text-size-adjust:none;-ms-text-size-adjust:none;mso-line-height-rule:exactly;text-decoration:underline;color:#333333;font-size:12px"><img
                                                                         src="https://i.ibb.co/f2jCcTr/logo.png"
                                                                         alt="Logo"
@@ -379,9 +380,11 @@
                                                            role="presentation"
                                                            style="mso-table-lspace:0pt;mso-table-rspace:0pt;border-collapse:collapse;border-spacing:0px">
                                                         <tr>
-                                                            <td align="center" style="padding:0;Margin:0"><h3
-                                                                    style="Margin:0;line-height:24px;mso-line-height-rule:exactly;font-family:'playfair display', georgia, 'times new roman', serif;font-size:20px;font-style:normal;font-weight:normal;color:#806B64">
-                                                                <b>Monday, July 1st, 2020</b></h3></td>
+                                                            <td align="center" style="padding:0;Margin:0">
+                                                                <h3 style="Margin:0;line-height:24px;mso-line-height-rule:exactly;font-family:'playfair display', georgia, 'times new roman', serif;font-size:20px;font-style:normal;font-weight:normal;color:#806B64">
+                                                                    <b>{{ time }}</b>
+                                                                </h3>
+                                                            </td>
                                                         </tr>
                                                         <tr>
                                                             <td align="center"
@@ -420,12 +423,15 @@
                                                         <tr>
                                                             <td align="center" style="padding:0;Margin:0;font-size:0px">
                                                                 <a target="_blank" href="https://viewstripo.email"
-                                                                   style="-webkit-text-size-adjust:none;-ms-text-size-adjust:none;mso-line-height-rule:exactly;text-decoration:underline;color:#2CB543;font-size:14px"><img
-                                                                        class="adapt-img"
-                                                                        src="https://eezvhtm.stripocdn.email/content/guids/CABINET_66f950c6b738d24a0c0ae438e5a17e95/images/70881620388152279.jpg"
-                                                                        alt
-                                                                        style="display:block;border:0;outline:none;text-decoration:none;-ms-interpolation-mode:bicubic"
-                                                                        width="267"></a></td>
+                                                                   style="-webkit-text-size-adjust:none;-ms-text-size-adjust:none;mso-line-height-rule:exactly;text-decoration:underline;color:#2CB543;font-size:14px">
+                                                                    <img
+                                                                            class="adapt-img"
+                                                                            src="{{ room.image }}"
+                                                                            alt=""
+                                                                            style="display:block;border:0;outline:none;text-decoration:none;-ms-interpolation-mode:bicubic"
+                                                                            width="267">
+                                                                </a>
+                                                            </td>
                                                         </tr>
                                                     </table>
                                                 </td>
@@ -446,14 +452,19 @@
                                                             <td align="left"
                                                                 style="padding:0;Margin:0;padding-top:10px;padding-bottom:10px">
                                                                 <h3 style="Margin:0;line-height:24px;mso-line-height-rule:exactly;font-family:'playfair display', georgia, 'times new roman', serif;font-size:20px;font-style:normal;font-weight:normal;color:#806B64">
-                                                                    Regular Suite</h3></td>
+                                                                    {{ room.name }}
+                                                                </h3>
+                                                            </td>
                                                         </tr>
                                                         <tr>
                                                             <td align="left"
                                                                 style="padding:0;Margin:0;padding-top:10px;padding-bottom:10px">
                                                                 <p style="Margin:0;-webkit-text-size-adjust:none;-ms-text-size-adjust:none;mso-line-height-rule:exactly;font-family:arial, 'helvetica neue', helvetica, sans-serif;line-height:21px;color:#333333;font-size:14px">
-                                                                    Capacity:&nbsp;<strong>1-4 per</strong>&nbsp;<br>Size:&nbsp;<strong>40<sup>M2&nbsp;</sup></strong><br>Price:&nbsp;<strong>$350/per
-                                                                    day</strong><br></p></td>
+                                                                    Adult: {{ room.adults }}
+                                                                    <br>Children: {{ room.children }}
+                                                                    <br>
+                                                                </p>
+                                                            </td>
                                                         </tr>
                                                     </table>
                                                 </td>
@@ -477,9 +488,10 @@
                                                            role="presentation"
                                                            style="mso-table-lspace:0pt;mso-table-rspace:0pt;border-collapse:collapse;border-spacing:0px">
                                                         <tr>
-                                                            <td align="left" style="padding:0;Margin:0"><p
-                                                                    style="Margin:0;-webkit-text-size-adjust:none;-ms-text-size-adjust:none;mso-line-height-rule:exactly;font-family:arial, 'helvetica neue', helvetica, sans-serif;line-height:21px;color:#333333;font-size:14px">
-                                                                <strong>$350&nbsp;x 5 days</strong></p></td>
+                                                            <td align="left" style="padding:0;Margin:0">
+                                                                <p style="Margin:0;-webkit-text-size-adjust:none;-ms-text-size-adjust:none;mso-line-height-rule:exactly;font-family:arial, 'helvetica neue', helvetica, sans-serif;line-height:21px;color:#333333;font-size:14px">
+                                                                </p>
+                                                            </td>
                                                         </tr>
                                                     </table>
                                                 </td>
@@ -497,9 +509,11 @@
                                                            role="presentation"
                                                            style="mso-table-lspace:0pt;mso-table-rspace:0pt;border-collapse:collapse;border-spacing:0px">
                                                         <tr>
-                                                            <td align="left" style="padding:0;Margin:0"><p
-                                                                    style="Margin:0;-webkit-text-size-adjust:none;-ms-text-size-adjust:none;mso-line-height-rule:exactly;font-family:arial, 'helvetica neue', helvetica, sans-serif;line-height:21px;color:#333333;font-size:14px">
-                                                                <strong>$1750.00</strong></p></td>
+                                                            <td align="left" style="padding:0;Margin:0">
+                                                                <p style="Margin:0;-webkit-text-size-adjust:none;-ms-text-size-adjust:none;mso-line-height-rule:exactly;font-family:arial, 'helvetica neue', helvetica, sans-serif;line-height:21px;color:#333333;font-size:14px">
+                                                                    <strong>${{ booking.total_price_usd }}</strong>
+                                                                </p>
+                                                            </td>
                                                         </tr>
                                                     </table>
                                                 </td>
@@ -523,10 +537,11 @@
                                                            role="presentation"
                                                            style="mso-table-lspace:0pt;mso-table-rspace:0pt;border-collapse:collapse;border-spacing:0px">
                                                         <tr>
-                                                            <td align="left" style="padding:0;Margin:0"><p
-                                                                    style="Margin:0;-webkit-text-size-adjust:none;-ms-text-size-adjust:none;mso-line-height-rule:exactly;font-family:arial, 'helvetica neue', helvetica, sans-serif;line-height:21px;color:#333333;font-size:14px">
-                                                                <strong></strong>Subtotal<br>Tax<strong><br>Total</strong><br>
-                                                            </p></td>
+                                                            <td align="left" style="padding:0;Margin:0">
+                                                                <p style="Margin:0;-webkit-text-size-adjust:none;-ms-text-size-adjust:none;mso-line-height-rule:exactly;font-family:arial, 'helvetica neue', helvetica, sans-serif;line-height:21px;color:#333333;font-size:14px">
+                                                                    <strong></strong>Subtotal<br>Tax<strong><br>Total</strong><br>
+                                                                </p>
+                                                            </td>
                                                         </tr>
                                                     </table>
                                                 </td>
@@ -544,9 +559,13 @@
                                                            role="presentation"
                                                            style="mso-table-lspace:0pt;mso-table-rspace:0pt;border-collapse:collapse;border-spacing:0px">
                                                         <tr>
-                                                            <td align="left" style="padding:0;Margin:0"><p
-                                                                    style="Margin:0;-webkit-text-size-adjust:none;-ms-text-size-adjust:none;mso-line-height-rule:exactly;font-family:arial, 'helvetica neue', helvetica, sans-serif;line-height:21px;color:#333333;font-size:14px">
-                                                                $1750.00<br>$00.00<br><strong>$1750.00</strong></p></td>
+                                                            <td align="left" style="padding:0;Margin:0">
+                                                                <p style="Margin:0;-webkit-text-size-adjust:none;-ms-text-size-adjust:none;mso-line-height-rule:exactly;font-family:arial, 'helvetica neue', helvetica, sans-serif;line-height:21px;color:#333333;font-size:14px">
+                                                                    ${{ booking.total_price_usd }}
+                                                                    <br>$00.00
+                                                                    <br><strong>${{ booking.total_price_usd }}</strong>
+                                                                </p>
+                                                            </td>
                                                         </tr>
                                                     </table>
                                                 </td>
@@ -576,7 +595,8 @@
                                                            style="mso-table-lspace:0pt;mso-table-rspace:0pt;border-collapse:collapse;border-spacing:0px">
                                                         <tr>
                                                             <td align="center" height="30"
-                                                                style="padding:0;Margin:0"></td>
+                                                                style="padding:0;Margin:0">
+                                                            </td>
                                                         </tr>
                                                     </table>
                                                 </td>
@@ -615,9 +635,10 @@
                                                            style="mso-table-lspace:0pt;mso-table-rspace:0pt;border-collapse:collapse;border-spacing:0px">
                                                         <tr>
                                                             <td align="center" style="padding:0;Margin:0;font-size:0px">
-                                                                <a target="_blank" href="https://viewstripo.email"
+                                                                <a target="_blank"
+                                                                   href="https://github.com/hoang3402/HotelBookingFE"
                                                                    style="-webkit-text-size-adjust:none;-ms-text-size-adjust:none;mso-line-height-rule:exactly;text-decoration:underline;color:#FFFFFF;font-size:12px"><img
-                                                                        src="https://eezvhtm.stripocdn.email/content/guids/CABINET_66f950c6b738d24a0c0ae438e5a17e95/images/95951619681128385.png"
+                                                                        src="https://i.ibb.co/f2jCcTr/logo.png"
                                                                         alt="Logo"
                                                                         style="display:block;border:0;outline:none;text-decoration:none;-ms-interpolation-mode:bicubic"
                                                                         height="47" title="Logo"></a></td>

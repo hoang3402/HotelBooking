@@ -58,6 +58,7 @@ urlpatterns = [
     path('staff/booking/', views.staff_booking_list_view, name='staff_booking_list_view'),
     path('staff/booking/<int:pk>/', views.staff_booking_detail_view, name='staff_booking_list_view'),
     path('staff/booking/<int:pk>/edit/', views.staff_booking_edit_view, name='staff_booking_edit_view'),
+    path('staff/booking/<int:pk>/confirm/', views.staff_booking_confirm_view, name='staff_booking_confirm_view'),
     path('booking/<int:pk>/delete/', views.staff_booking_delete_view, name='staff_booking_delete_view'),
 
     # Booking for customer
@@ -69,7 +70,4 @@ urlpatterns = [
 
     path('search/', views.search_hotel_view, name="search"),
     path('days-available/', views.days_room_available_view, name="is_room_available"),
-
-    # Email
-    path('send-email/', views.send_email_view, name="send_email"),
 ]

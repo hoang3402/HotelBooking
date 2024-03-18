@@ -3,7 +3,11 @@ from datetime import datetime, timedelta, date
 from decimal import Decimal
 
 import requests
+from django.core.mail import EmailMultiAlternatives
+from django.template.loader import render_to_string
+from django.utils.html import strip_tags
 
+from HotelBooking import settings
 from polls.models import Booking
 
 
@@ -80,3 +84,18 @@ def calculate_total_cost(check_in_date, check_out_date, foreign_price, exchange_
     total_cost = local_price * number_of_nights
 
     return total_cost
+
+
+def send_mail_confirmation(booking, user, room):
+    time = booking.check_in_date.strftime("%A, %B %dst, %Y")
+    html_message = render_to_string('email.html', {'booking': booking, 'room': room, 'time': time})
+    plain_message = strip_tags(html_message)
+    message = EmailMultiAlternatives(
+        subject='Complete your registration',
+        body=plain_message,
+        from_email=settings.EMAIL_HOST_USER,
+        to=[user.email],
+    )
+
+    message.attach_alternative(html_message, 'text/html')
+    message.send()

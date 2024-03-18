@@ -1,9 +1,5 @@
 from datetime import datetime, timedelta
 
-from django.conf import settings
-from django.core.mail import send_mail, EmailMultiAlternatives
-from django.template.loader import render_to_string
-from django.utils.html import strip_tags
 from rest_framework import viewsets, status
 from rest_framework.pagination import PageNumberPagination
 from rest_framework.permissions import AllowAny, IsAuthenticated
@@ -13,7 +9,8 @@ from rest_framework.views import APIView
 from HotelBooking.settings import API_KEY_EXCHANGE_CURRENCY
 from polls.auth.serializers import UserPermission, StaffPermission
 from polls.serializers import *
-from polls.utilities import calculate_total_cost, get_exchange_rate, days_available_of_room, is_room_available
+from polls.utilities import calculate_total_cost, get_exchange_rate, days_available_of_room, is_room_available, \
+    send_mail_confirmation
 
 
 class NoPagination(PageNumberPagination):
@@ -171,6 +168,27 @@ staff_booking_list_view = BookingViewSet.as_view({'get': 'list'})
 staff_booking_detail_view = BookingViewSet.as_view({'get': 'retrieve'})
 staff_booking_edit_view = BookingViewSet.as_view({'put': 'update', 'patch': 'partial_update'})
 staff_booking_delete_view = BookingViewSet.as_view({'delete': 'destroy'})
+
+
+class BookingConfirmViewSet(viewsets.ModelViewSet):
+    permission_classes = [StaffPermission]
+    queryset = Booking.objects.all()
+    serializer_class = BookingSerializer
+
+    def retrieve(self, request, *args, **kwargs):
+        booking = Booking.objects.get(id=kwargs['pk'])
+        if booking.status in ['Confirmed', 'Completed']:
+            return Response({"error": "Booking already confirmed or completed."}, status=status.HTTP_400_BAD_REQUEST)
+
+        booking.status = 'Confirmed'
+        booking.save()
+
+        send_mail_confirmation(booking, booking.user, booking.room)
+
+        return Response({"status": "Booking confirmed."}, status=status.HTTP_200_OK)
+
+
+staff_booking_confirm_view = BookingConfirmViewSet.as_view({'get': 'retrieve'})
 
 
 class ViewBookings(viewsets.ModelViewSet):
@@ -452,32 +470,3 @@ class SearchHotel(APIView):
 
 
 search_hotel_view = SearchHotel.as_view()
-
-
-class SendEmail(APIView):
-    permission_classes = [IsAuthenticated]
-
-    def post(self, request):
-        try:
-            user = request.user
-
-            html_message = render_to_string('email.html', {'user': request.user})
-            plain_message = strip_tags(html_message)
-            message = EmailMultiAlternatives(
-                subject='Complete your registration',
-                body=plain_message,
-                from_email=settings.EMAIL_HOST_USER,
-                to=[user.email],
-            )
-
-            message.attach_alternative(html_message, 'text/html')
-            message.send()
-
-            return Response({"message": "Email sent successfully. to {}".format(user.email)},
-                            status=status.HTTP_200_OK)
-        except Exception as e:
-            return Response({"detail": str(e)},
-                            status=status.HTTP_400_BAD_REQUEST)
-
-
-send_email_view = SendEmail.as_view()

@@ -59,13 +59,13 @@ class StaffPermission(BasePermission):
         if view.action == 'destroy':
             return request.user.is_superuser
         else:
-            return request.user.is_staff
+            return request.user.is_staff | request.user.is_superuser
 
     def has_object_permission(self, request, view, obj):
         if view.action == 'destroy':
             return request.user.is_superuser
         else:
-            return request.user.is_staff
+            return request.user.is_staff | request.user.is_superuser
 
 
 class AdminPermission(BasePermission):
