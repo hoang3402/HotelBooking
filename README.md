@@ -34,7 +34,7 @@
 
 
 - **Chức năng của Quản trị viên Super Admin**:
-    - [ ] Quản lý Ứng dụng
+    - [x] Quản lý Ứng dụng
         - Quản trị viên có khả năng quản lý người dùng (thêm, xóa, sửa, tìm kiếm người dùng)
         - Có thể xem toàn bô khách sạn, phòng trong hệ thống
 
