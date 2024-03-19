@@ -167,6 +167,30 @@ class UserViewSet(viewsets.ModelViewSet):
     serializer_class = UserSerializer
     permission_classes = [AdminPermission]
 
+    def partial_update(self, request, pk):
+        user = User.objects.get(pk=pk)
+        role = request.data.get('role')
+
+        if (role not in ['user', 'staff', 'admin']):
+            return Response({'detail': 'role must be user, staff or admin'}, status=status.HTTP_400_BAD_REQUEST)
+
+        match role:
+            case 'user':
+                user.is_staff = False
+                user.is_superuser = False
+            case 'staff':
+                user.is_staff = True
+                user.is_superuser = False
+            case 'admin':
+                user.is_staff = True
+                user.is_superuser = True
+            
+
+        serializer = UserSerializer(user, data=request.data, partial=True)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return response.Response(serializer.data)
+
 
 users = UserViewSet.as_view({'get': 'list'})
 get_user = UserViewSet.as_view({'get': 'retrieve'})
