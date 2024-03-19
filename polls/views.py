@@ -2,7 +2,6 @@ from datetime import datetime, timedelta
 
 from django.shortcuts import get_object_or_404
 from rest_framework import viewsets, status
-from rest_framework.pagination import PageNumberPagination
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -423,9 +422,13 @@ class SearchHotel(APIView):
                 return Response({"error": "Number of adults are required."},
                                 status=status.HTTP_400_BAD_REQUEST)
 
-            hotel_instance = Hotel.objects.all().select_related('province__country')
+            rooms = Room.objects.filter(is_available=True)
 
-            hotel_instance = hotel_instance.filter(room__is_available=True)
+            # Check hotel have booking in this time
+            exist_booking = Booking.objects.filter(check_in_date__lt=check_out_date, check_out_date__gt=check_in_date)
+            room_available = rooms.exclude(id__in=exist_booking.values('room_id'))
+
+            hotel_instance = Hotel.objects.filter(room__id__in=room_available).distinct('id')
 
             if city:
                 hotel_instance = hotel_instance.filter(province__city__code=city)
@@ -445,18 +448,8 @@ class SearchHotel(APIView):
             if keyword:
                 hotel_instance = hotel_instance.filter(name__icontains=keyword)
 
-            available_hotels = []
-            for hotel in hotel_instance:
-                rooms = hotel.room_set.all()
-                for room in rooms:
-                    if is_room_available(room, check_in_date, check_out_date):
-                        available_hotels.append(hotel)
-                        break
-
-            # serializer = HotelSerializer(available_hotels, many=True)
-
             paginator = CustomPagination()
-            result_page = paginator.paginate_queryset(available_hotels, request)
+            result_page = paginator.paginate_queryset(hotel_instance, request)
             serializer = HotelSerializer(result_page, many=True)
 
             return paginator.get_paginated_response(serializer.data)
