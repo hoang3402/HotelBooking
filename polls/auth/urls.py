@@ -28,11 +28,11 @@ urlpatterns = [
     path('token/test/', views.test_token, name='token_test'),
 
     path('permissions/', views.check_permission, name='permissions'),
-    path('permissions/<int:user_id>/', views.permissions, name='permissions'),
+    path('permissions/<int:pk>/', views.permissions, name='permissions'),
 
     path('user/', views.users, name='user'),
-    path('user/<int:user_id>/', views.get_user, name='user_details'),
-    path('user/<int:user_id>/edit/', views.edit_user, name='edit_user'),
-    # path('user/<int:user_id>/change_password/', views.change_password, name='change_password'),
-    path('user/<int:user_id>/delete/', views.delete_user, name='delete_user'),
+    path('user/<int:pk>/', views.get_user, name='user_details'),
+    path('user/<int:pk>/edit/', views.edit_user, name='edit_user'),
+    # path('user/<int:pk>/change_password/', views.change_password, name='change_password'),
+    path('user/<int:pk>/delete/', views.delete_user, name='delete_user'),
 ]
