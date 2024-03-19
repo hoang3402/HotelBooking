@@ -22,7 +22,7 @@
         - Xem, huỷ đặt phòng hiện tại
     - [x] Xem lịch sử đặt phòng
         - Lịch sử đặt phòng bao gồm thông tin về các đặt phòng hiện tại và các đặt phòng trước đây mà họ đã thực hiện.
-    - [ ] Đánh giá
+    - [x] Đánh giá
         - Có thể đánh giá, comment cho khách sạn họ đã lưu trú
 
 
