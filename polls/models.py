@@ -164,7 +164,7 @@ class Booking(models.Model):
 
     def save(self, *args, **kwargs):
         super().save(*args, **kwargs)  # Lưu booking theo mặc định
-        update_booking_status(sender=self.__class__, instance=self)
+        # update_booking_status(sender=self.__class__, instance=self)
 
     def __str__(self):
         return f'{self.id}'
