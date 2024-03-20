@@ -38,7 +38,7 @@
         - Có thể xem toàn bô khách sạn, phòng trong hệ thống
 
 
-- [ ] **Chức năng Tích hợp Thanh toán**:
+- [x] **Chức năng Tích hợp Thanh toán**:
     - Cung cấp tích hợp đơn giản với cổng thanh toán để xử lý thanh toán cho đặt phòng.
     - Kế hoạch sẽ sử dụng VNPay
 
