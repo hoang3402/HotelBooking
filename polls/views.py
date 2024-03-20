@@ -505,6 +505,24 @@ create_comment_view = CommentViewSet.as_view({'post': 'create'})
 delete_comment_view = CommentViewSet.as_view({'delete': 'destroy'})
 
 
+class ExchangeRateView(APIView):
+    permission_classes = [AllowAny]
+
+    def post(self, request):
+        try:
+            amount = request.data.get('amount', 1)
+            from_currency = request.data.get('from_currency', 'USD')
+            to_currency = request.data.get('to_currency', 'USD')
+            response = get_exchange_rate(API_KEY_EXCHANGE_CURRENCY, from_currency, to_currency, amount)
+            return Response({"price": response}, status=status.HTTP_200_OK)
+        except Exception as e:
+            return Response({"detail": str(e)},
+                            status=status.HTTP_400_BAD_REQUEST)
+
+
+exchange_rate_view = ExchangeRateView.as_view()
+
+
 class ChatBotView(APIView):
     permission_classes = [AllowAny]
 

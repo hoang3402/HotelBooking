@@ -1,4 +1,4 @@
-from django.urls import include, path
+from django.urls import include, path, re_path
 
 from . import views
 
@@ -77,4 +77,7 @@ urlpatterns = [
     path('days-available/', views.days_room_available_view, name="is_room_available"),
 
     path('chat/', views.chatbot_view, name="chatbot"),
+    path('exchange_rate/', views.exchange_rate_view, name="exchange_rate"),
+
+    re_path('vnpay/', include('vnpay.api_urls'), name='vnpay'),
 ]

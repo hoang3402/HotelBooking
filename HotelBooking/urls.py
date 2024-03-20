@@ -21,6 +21,5 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/', include('polls.urls'), name='api'),
     path('swagger/', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
-    path('vnpay/', include('vnpay.api_urls'), name='vnpay'),
 ]
 
