@@ -60,6 +60,10 @@ pip freeze > requirements.txt
 ```
 
 ```shell
+pip install -r requirements.txt
+```
+
+```shell
 py manage.py makemigrations
 ```
 

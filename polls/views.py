@@ -194,6 +194,7 @@ staff_booking_confirm_view = BookingConfirmViewSet.as_view({'get': 'retrieve'})
 
 class ViewBookings(viewsets.ModelViewSet):
     permission_classes = [IsAuthenticated]
+    serializer_class = BookingSerializer
 
     def retrieve(self, *args, **kwargs):
         bookings = Booking.objects.filter(user=self.request.user)
