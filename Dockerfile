@@ -5,6 +5,7 @@ EXPOSE 8000
 WORKDIR /app
 COPY requirements.txt /app
 RUN pip install --upgrade pip
+RUN pip3 install --pre torch torchvision torchaudio --index-url https://download.pytorch.org/whl/nightly/cpu
 RUN pip3 install -r requirements.txt --no-cache-dir
 COPY . /app
 ENTRYPOINT ["python3"]
