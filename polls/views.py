@@ -173,6 +173,10 @@ class BookingConfirmViewSet(viewsets.ModelViewSet):
 
     def retrieve(self, request, *args, **kwargs):
         booking = Booking.objects.get(id=kwargs['pk'])
+
+        if booking.status == 'Cancelled':
+            return Response({"error": "Booking already cancelled."}, status=status.HTTP_400_BAD_REQUEST)
+
         if booking.status in ['Confirmed', 'Completed']:
             return Response({"error": "Booking already confirmed or completed."}, status=status.HTTP_400_BAD_REQUEST)
 
