@@ -1,6 +1,6 @@
 # syntax=docker/dockerfile:1.4
 
-FROM python:3.11-bullseye AS builder
+FROM python:3.11-bookworm AS builder
 EXPOSE 8000
 WORKDIR /app
 COPY requirements.txt /app
