@@ -1,5 +1,6 @@
 /node_modules/.yarn-integrity
 /polls/migrations/__pycache__
 /HotelBooking/__pycache__
+/HotelBooking/.env
 /polls/__pycache__
 /polls/auth/__pycache__
