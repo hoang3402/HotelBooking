@@ -7,6 +7,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from HotelBooking.settings import API_KEY_EXCHANGE_CURRENCY
+from chatbot.chat import get_response
 from polls.auth.serializers import UserPermission, StaffPermission, CanViewAndEditOwn
 from polls.serializers import *
 from polls.utilities import calculate_total_cost, get_exchange_rate, days_available_of_room, is_room_available, \
@@ -501,3 +502,19 @@ class CommentViewSet(viewsets.ModelViewSet):
 comment_list_view = CommentViewSet.as_view({'get': 'list'})
 create_comment_view = CommentViewSet.as_view({'post': 'create'})
 delete_comment_view = CommentViewSet.as_view({'delete': 'destroy'})
+
+
+class ChatBotView(APIView):
+    permission_classes = [AllowAny]
+
+    def post(self, request):
+        try:
+            message = request.data.get('message')
+            response = get_response(message)
+            return Response({"message": response}, status=status.HTTP_200_OK)
+        except Exception as e:
+            return Response({"detail": str(e)},
+                            status=status.HTTP_400_BAD_REQUEST)
+
+
+chatbot_view = ChatBotView.as_view()
