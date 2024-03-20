@@ -1,5 +1,6 @@
 from django.contrib.auth import authenticate, login
-from rest_framework import generics, response, status, viewsets
+from drf_yasg.utils import swagger_auto_schema
+from rest_framework import response, status, viewsets
 from rest_framework.exceptions import AuthenticationFailed
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
@@ -8,24 +9,24 @@ from rest_framework_simplejwt.authentication import JWTAuthentication
 from rest_framework_simplejwt.tokens import RefreshToken
 
 from polls.auth.serializers import UserSerializer, get_tokens_for_user, AdminPermission
+from polls.auth.swagger import *
 from polls.models import User
 
 
-class UserCreateViewSet(generics.CreateAPIView):
+class UserCreateViewSet(APIView):
     permission_classes = [AllowAny]
-    queryset = User.objects.all()
-    serializer_class = UserSerializer
 
-    def create(self, request, *args, **kwargs):
-        response = super(UserCreateViewSet, self).create(request, *args, **kwargs)
-        user_data = response.data
-        user = User.objects.get(pk=user_data['id'])
-        token = get_tokens_for_user(user)
+    @swagger_auto_schema(request_body=user_register_params, responses={200: response_auth})
+    def post(self, request, *args, **kwargs):
+        request.data['is_staff'] = False
+        request.data['is_superuser'] = False
+        user_data = User.objects.create(**request.data)
+        token = get_tokens_for_user(user_data)
 
         return Response({
             'refresh': token['refresh'],
             'access': token['access'],
-            'user': user_data
+            'user': UserSerializer(user_data).data
         })
 
 
@@ -35,6 +36,7 @@ user_create_view = UserCreateViewSet.as_view()
 class UserLoginViewSet(APIView):
     permission_classes = [AllowAny]
 
+    @swagger_auto_schema(request_body=user_login_params, responses={200: response_auth})
     def post(self, request, *args, **kwargs):
         try:
             username = request.data.get('email')
@@ -73,6 +75,7 @@ user_login_view = UserLoginViewSet.as_view()
 class RefreshTokenViewSet(APIView):
     permission_classes = [AllowAny]
 
+    @swagger_auto_schema(request_body=refresh_token, responses={200: response_refresh})
     def post(self, request, *args, **kwargs):
         try:
             refresh = RefreshToken(request.data.get('refresh'))
