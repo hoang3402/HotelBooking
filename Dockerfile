@@ -9,8 +9,8 @@ ENV PATH="/venv/bin:$PATH"
 
 COPY requirements.txt /app
 RUN pip install --upgrade pip
-RUN pip3 install --no-cache-dir -r requirements.txt
-RUN pip3 install --no-cache-dir --pre torch torchvision torchaudio --index-url https://download.pytorch.org/whl/nightly/cpu
+RUN pip install --no-cache-dir -r requirements.txt
+RUN pip install --no-cache-dir --pre torch torchvision torchaudio --index-url https://download.pytorch.org/whl/nightly/cpu
 COPY . /app
 
 ENTRYPOINT ["python3"]
