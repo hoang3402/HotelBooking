@@ -167,6 +167,20 @@ class UserViewSet(viewsets.ModelViewSet):
     serializer_class = UserSerializer
     permission_classes = [AdminPermission]
 
+    def create(self, request, *args, **kwargs):
+
+        role = request.data.get('role')
+        
+        if (role not in ['user', 'staff', 'admin']):
+            return Response({'detail': 'role must be user, staff or admin'}, status=status.HTTP_400_BAD_REQUEST)
+
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        self.perform_create(serializer)
+        headers = self.get_success_headers(serializer.data)
+        return response.Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
+
+
     def partial_update(self, request, pk):
         user = User.objects.get(pk=pk)
         role = request.data.get('role')
@@ -194,5 +208,6 @@ class UserViewSet(viewsets.ModelViewSet):
 
 users = UserViewSet.as_view({'get': 'list'})
 get_user = UserViewSet.as_view({'get': 'retrieve'})
+create_user = UserViewSet.as_view({'post': 'create'})
 edit_user = UserViewSet.as_view({'patch': 'partial_update'})
 delete_user = UserViewSet.as_view({'delete': 'destroy'})

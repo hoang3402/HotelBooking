@@ -31,6 +31,7 @@ urlpatterns = [
     path('permissions/<int:pk>/', views.permissions, name='permissions'),
 
     path('user/', views.users, name='user'),
+    path('user/create/', views.create_user, name='create_user'),
     path('user/<int:pk>/', views.get_user, name='user_details'),
     path('user/<int:pk>/edit/', views.edit_user, name='edit_user'),
     # path('user/<int:pk>/change_password/', views.change_password, name='change_password'),
