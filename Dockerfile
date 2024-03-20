@@ -6,6 +6,7 @@ WORKDIR /app
 COPY requirements.txt /app
 RUN pip install --upgrade pip
 RUN pip3 install -r requirements.txt --no-cache-dir
+RUN python -m nltk.downloader punkt
 COPY . /app
 ENTRYPOINT ["python3"]
 CMD ["manage.py", "runserver", "0.0.0.0:8000"]
