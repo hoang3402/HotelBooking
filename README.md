@@ -43,7 +43,7 @@
     - Kế hoạch sẽ sử dụng VNPay
 
 
-- [ ] **Chức năng Hỗ trợ Trực tuyến**:
+- [x] **Chức năng Hỗ trợ Trực tuyến**:
     - Cung cấp chatbot để hỗ trợ người dùng về việc đặt phòng hoặc giải quyết sự cố.
 
 ---
