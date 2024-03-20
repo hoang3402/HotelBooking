@@ -187,4 +187,4 @@ SIMPLE_JWT = {
 VNPAY_TMN_CODE = 'CF159YVI'
 VNPAY_HASH_SECRET_KEY = 'MXTICLEIBPNNQXXLYFWOWUNIKRPRBVLT'
 VNPAY_PAYMENT_URL = 'https://sandbox.vnpayment.vn/paymentv2/vpcpay.html'
-VNPAY_RETURN_URL = 'localhost:8000/payment_return'
+VNPAY_RETURN_URL = 'https://hotel-tma.zeabur.app/vnpay/payment_return/'
