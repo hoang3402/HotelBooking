@@ -11,7 +11,13 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 """
 from datetime import timedelta
 from pathlib import Path
+import environ
+import os
 
+env = environ.Env()
+
+# read th .env file
+environ.Env.read_env()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -20,11 +26,12 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-mf#r!f2)r($n$8c6&b_edpxuz-5f^fpw&e#om)0t_(sr7j1th8'
-API_KEY_EXCHANGE_CURRENCY = '7aa01f8cdamsh18ce574fb6df7fbp110df3jsn7d64d0db076b'
+SECRET_KEY = env('SECRET_KEY')
+API_KEY_EXCHANGE_CURRENCY = env('API_KEY_EXCHANGE_CURRENCY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = env('DEBUG')
+
 
 ALLOWED_HOSTS = ['localhost', 'hotel-tma.zeabur.app', '127.0.0.1', 'hotel-tma-fe.zeabur.app']
 
@@ -90,11 +97,11 @@ WSGI_APPLICATION = 'HotelBooking.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'hotel-booking',
-        "USER": "nvh.02021995",
-        "PASSWORD": "xKIeGJ8Adqc6",
-        "HOST": "ep-withered-bird-40673570-pooler.ap-southeast-1.aws.neon.tech",
-        "PORT": "5432",
+        'NAME': env('DB_NAME'),
+        "USER": env("DB_USER"),
+        "PASSWORD": env("DB_PASSWORD"),
+        "HOST": env("DB_HOST"),
+        "PORT": env("DB_PORT"),
     }
 }
 
@@ -120,11 +127,11 @@ AUTH_PASSWORD_VALIDATORS = [
 
 # Setup Email
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = 'smtp-hoang3409.alwaysdata.net'
+EMAIL_HOST = env('EMAIL_HOST')
 EMAIL_USE_TLS = True
 EMAIL_PORT = 587
-EMAIL_HOST_USER = 'hoang3409@alwaysdata.net'
-EMAIL_HOST_PASSWORD = 'k8eHarwdXQH.AJg'
+EMAIL_HOST_USER = env('EMAIL_HOST_USER')
+EMAIL_HOST_PASSWORD = env('EMAIL_HOST_PASSWORD')
 
 # Internationalization
 # https://docs.djangoproject.com/en/5.0/topics/i18n/
@@ -184,7 +191,7 @@ SIMPLE_JWT = {
 }
 
 
-VNPAY_TMN_CODE = 'CF159YVI'
-VNPAY_HASH_SECRET_KEY = 'MXTICLEIBPNNQXXLYFWOWUNIKRPRBVLT'
-VNPAY_PAYMENT_URL = 'https://sandbox.vnpayment.vn/paymentv2/vpcpay.html'
-VNPAY_RETURN_URL = 'https://hotel-tma.zeabur.app/vnpay/payment_return/'
+VNPAY_TMN_CODE = env('VNPAY_TMN_CODE')
+VNPAY_HASH_SECRET_KEY = env('VNPAY_HASH_SECRET_KEY')
+VNPAY_PAYMENT_URL = env('VNPAY_PAYMENT_URL')
+VNPAY_RETURN_URL = env('VNPAY_RETURN_URL')
