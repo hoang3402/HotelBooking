@@ -10,7 +10,7 @@ from rest_framework.views import APIView
 from HotelBooking.settings import API_KEY_EXCHANGE_CURRENCY
 from chatbot.chat import get_response
 from polls.auth.serializers import UserPermission, StaffPermission, CanViewAndEditOwn
-from polls.documents import HotelDocument
+from polls.documents import RoomDocument
 from polls.serializers import *
 from polls.utilities import calculate_total_cost, get_exchange_rate, days_available_of_room, is_room_available, \
     send_mail_confirmation, NoPagination, CustomPagination
@@ -543,8 +543,8 @@ chatbot_view = ChatBotView.as_view()
 
 class ElasticsearchView(APIView):
     permission_classes = [AllowAny]
-    search_document = HotelDocument
-    hotel_serializer = HotelSerializer
+    search_document = RoomDocument
+    hotel_serializer = RoomSerializer
 
     def post(self, request):
         try:

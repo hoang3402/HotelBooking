@@ -49,12 +49,12 @@ class RoomSerializer(serializers.ModelSerializer):
 
 
 class HotelSerializer(serializers.ModelSerializer):
-    # province = ProvinceSerializer()
-    rooms = RoomSerializer(many=True)
+    province = ProvinceSerializer()
+    # rooms = RoomSerializer(many=True)
 
     class Meta:
         model = Hotel
-        fields = ['id', 'name', 'phone_number', 'average_rating', 'email', 'image', 'rooms']
+        fields = ['id', 'name', 'phone_number', 'average_rating', 'email', 'image', 'province']
 
 
 class CreateHotelSerializer(serializers.ModelSerializer):

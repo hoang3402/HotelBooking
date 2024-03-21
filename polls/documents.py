@@ -13,6 +13,7 @@ class RoomDocument(Document):
     class Django:
         model = Room
         fields = [
+            "id",
             "name",
             "description",
             "adults",
@@ -42,6 +43,7 @@ class HotelDocument(Document):
     class Django:
         model = Hotel
         fields = [
+            "id",
             "name",
             "address",
             "description",
@@ -50,9 +52,3 @@ class HotelDocument(Document):
             "email",
             "image",
         ]
-
-        related_models = [Room, Province]
-
-    def get_instances_from_related(self, related_instance):
-        if isinstance(related_instance, RoomDocument):
-            return related_instance.room_set.all()
