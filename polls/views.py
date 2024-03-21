@@ -10,7 +10,7 @@ from rest_framework.views import APIView
 from HotelBooking.settings import API_KEY_EXCHANGE_CURRENCY
 from chatbot.chat import get_response
 from polls.auth.serializers import UserPermission, StaffPermission, CanViewAndEditOwn
-from polls.documents import RoomDocument
+from polls.documents import RoomDocument, HotelDocument
 from polls.serializers import *
 from polls.utilities import calculate_total_cost, get_exchange_rate, days_available_of_room, is_room_available, \
     send_mail_confirmation, NoPagination, CustomPagination
@@ -543,20 +543,27 @@ chatbot_view = ChatBotView.as_view()
 
 class ElasticsearchView(APIView):
     permission_classes = [AllowAny]
-    search_document = RoomDocument
-    hotel_serializer = RoomSerializer
+    search_document = HotelDocument
+    # hotel_serializer = RoomSerializer
 
     def post(self, request):
         try:
-            q = Q(
-                'multi_match',
-                query=request.data.get('query'),
-                fields=['name']
-            )
-            search = self.search_document.search().query(q)
+            query = request.data.get('query')
+            if query:
+                q = Q(
+                    'multi_match',
+                    query=query,
+                    fields=['name'],
+                    fuzziness="auto"
+                )
+                search = self.search_document.search().query(q)
+            else:
+                search = self.search_document.search()
+
             response = search.execute()
 
-            results = self.hotel_serializer(response, many=True).data
+            # results = self.hotel_serializer(response, many=True).data
+            results = response.to_dict()
             return Response({"results": results}, status=status.HTTP_200_OK)
 
         except Exception as e:
