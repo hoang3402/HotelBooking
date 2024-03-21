@@ -431,7 +431,7 @@ class SearchHotel(APIView):
             rooms = Room.objects.filter(is_available=True)
 
             # Check hotel have booking in this time
-            exist_booking = Booking.objects.filter(check_in_date__lt=check_out_date, check_out_date__gt=check_in_date)
+            exist_booking = Booking.objects.filter(check_in_date__lte=check_out_date, check_out_date__gte=check_in_date)
             room_available = rooms.exclude(id__in=exist_booking.values('room_id'))
 
             hotel_instance = Hotel.objects.filter(room__id__in=room_available).distinct('id')
