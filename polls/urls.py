@@ -74,6 +74,7 @@ urlpatterns = [
     path('comment/<int:pk>/delete/', views.delete_comment_view, name="delete_comment"),
 
     path('search/', views.search_hotel_view, name="search"),
+    path('ES/', views.elasticsearch, name="ES"),
     path('days-available/', views.days_room_available_view, name="is_room_available"),
 
     path('chat/', views.chatbot_view, name="chatbot"),

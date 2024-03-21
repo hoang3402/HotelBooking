@@ -50,11 +50,18 @@
 
 # Setup docker
 
+Yêu cầu:
+- [x] Tạo một Dockerfile cho phần back-end và một Dockerfile cho phần front-end
+- [ ] Sử dụng Docker Compose để quản lý và triển khai các container của bạn.
+- [x] Sử dụng Elasticsearch container để lưu trữ và truy xuất dữ liệu của ứng dụng.
+- [x] Đảm bảo ứng dụng của bạn hoạt động trong môi trường container.
+
 ---
 
 ## python
 
 command make requirements
+
 ```shell
 pip freeze > requirements.txt
 ```
@@ -69,4 +76,12 @@ py manage.py makemigrations
 
 ```shell
 py manage.py migrate
+```
+
+---
+
+Command Elasticsearch
+
+```shell
+py manage.py search_index --rebuild
 ```

@@ -9,10 +9,11 @@ https://docs.djangoproject.com/en/5.0/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.0/ref/settings/
 """
+import os
 from datetime import timedelta
 from pathlib import Path
+
 import environ
-import os
 
 env = environ.Env()
 
@@ -32,7 +33,6 @@ API_KEY_EXCHANGE_CURRENCY = env('API_KEY_EXCHANGE_CURRENCY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = env('DEBUG')
 
-
 ALLOWED_HOSTS = ['localhost', 'hotel-tma.zeabur.app', '127.0.0.1', 'hotel-tma-fe.zeabur.app']
 
 CORS_ORIGIN_ALLOW_ALL = False
@@ -49,6 +49,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    "django_elasticsearch_dsl",
     'corsheaders',
     "polls.apps.PollsConfig",
     'rest_framework',
@@ -102,6 +103,15 @@ DATABASES = {
         "PASSWORD": env("DB_PASSWORD"),
         "HOST": env("DB_HOST"),
         "PORT": env("DB_PORT"),
+    }
+}
+
+# Elasticsearch
+# https://django-elasticsearch-dsl.readthedocs.io/en/latest/settings.html
+
+ELASTICSEARCH_DSL = {
+    "default": {
+        "hosts": "https://elasticsearch.zeabur.app/",
     }
 }
 
@@ -189,7 +199,6 @@ SIMPLE_JWT = {
 
     "TOKEN_OBTAIN_SERIALIZER": "polls.auth.serializers.MyTokenObtainPairSerializer",
 }
-
 
 VNPAY_TMN_CODE = env('VNPAY_TMN_CODE')
 VNPAY_HASH_SECRET_KEY = env('VNPAY_HASH_SECRET_KEY')

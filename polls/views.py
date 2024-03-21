@@ -1,6 +1,7 @@
 from datetime import datetime, timedelta
 
 from django.shortcuts import get_object_or_404
+from elasticsearch_dsl import Q
 from rest_framework import viewsets, status
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
@@ -9,6 +10,7 @@ from rest_framework.views import APIView
 from HotelBooking.settings import API_KEY_EXCHANGE_CURRENCY
 from chatbot.chat import get_response
 from polls.auth.serializers import UserPermission, StaffPermission, CanViewAndEditOwn
+from polls.documents import HotelDocument
 from polls.serializers import *
 from polls.utilities import calculate_total_cost, get_exchange_rate, days_available_of_room, is_room_available, \
     send_mail_confirmation, NoPagination, CustomPagination
@@ -537,3 +539,29 @@ class ChatBotView(APIView):
 
 
 chatbot_view = ChatBotView.as_view()
+
+
+class ElasticsearchView(APIView):
+    permission_classes = [AllowAny]
+    search_document = HotelDocument
+    hotel_serializer = HotelSerializer
+
+    def post(self, request):
+        try:
+            q = Q(
+                'multi_match',
+                query=request.data.get('query'),
+                fields=['name']
+            )
+            search = self.search_document.search().query(q)
+            response = search.execute()
+
+            results = self.hotel_serializer(response, many=True).data
+            return Response({"results": results}, status=status.HTTP_200_OK)
+
+        except Exception as e:
+            return Response({"detail": str(e)},
+                            status=status.HTTP_400_BAD_REQUEST)
+
+
+elasticsearch = ElasticsearchView.as_view()
