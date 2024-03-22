@@ -10,7 +10,7 @@ from rest_framework.views import APIView
 from HotelBooking.settings import API_KEY_EXCHANGE_CURRENCY
 from chatbot.chat import get_response
 from polls.auth.serializers import UserPermission, StaffPermission, CanViewAndEditOwn
-from polls.documents import RoomDocument, HotelDocument
+from polls.documents import BookingDocument, RoomDocument, HotelDocument
 from polls.serializers import *
 from polls.utilities import calculate_total_cost, get_exchange_rate, days_available_of_room, is_room_available, \
     send_mail_confirmation, NoPagination, CustomPagination
@@ -543,28 +543,40 @@ chatbot_view = ChatBotView.as_view()
 
 class ElasticsearchView(APIView):
     permission_classes = [AllowAny]
-    search_document = HotelDocument
-    # hotel_serializer = RoomSerializer
+    pagination_class = CustomPagination
 
     def post(self, request):
         try:
-            query = request.data.get('query')
-            if query:
-                q = Q(
-                    'multi_match',
-                    query=query,
-                    fields=['name'],
-                    fuzziness="auto"
-                )
-                search = self.search_document.search().query(q)
-            else:
-                search = self.search_document.search()
+            check_in_date = request.data.get('check_in_date')
+            check_out_date = request.data.get('check_out_date')
 
-            response = search.execute()
+            # Đầu tiên, tìm room.id đã đặt
+            booked_q = Q('bool', must=[
+                Q('range', booking_date={'gte': check_in_date, 'lte': check_out_date}),
+            ])
 
-            # results = self.hotel_serializer(response, many=True).data
-            results = response.to_dict()
-            return Response({"results": results}, status=status.HTTP_200_OK)
+            booked_search = BookingDocument.search().query(booked_q).extra(size=1000)
+            # Thực thi truy vấn đã đặt
+            booked_response = booked_search.execute()
+            booked_ids = [hit.room.id for hit in booked_response]  # Lấy danh sách room.id
+
+            # Tiếp theo, dùng danh sách booked_ids để loại trừ các phòng đã đặt
+            available_rooms_q = ~Q('ids', values=booked_ids) & Q('term', is_available=True)
+            available_rooms_search = RoomDocument.search().query(available_rooms_q).extra(size=1000)
+
+            available_rooms_response = available_rooms_search.execute()
+
+            hotel_ids = [hit.hotel.id for hit in available_rooms_response]
+
+            available_hotels_q = Q('ids', values=hotel_ids)
+            available_rooms_search = HotelDocument.search().query(available_hotels_q).extra(size=1000)
+            available_rooms_response = available_rooms_search.execute()
+
+            paginator = CustomPagination()
+            result_page = paginator.paginate_queryset(available_rooms_response, request)
+            serializer = HotelSerializer(result_page, many=True)
+
+            return paginator.get_paginated_response(serializer.data)
 
         except Exception as e:
             return Response({"detail": str(e)},
