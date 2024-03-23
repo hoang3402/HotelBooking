@@ -226,7 +226,7 @@ class ViewBookings(viewsets.ModelViewSet):
                 return Response({"error": "Room not available for the specified dates."},
                                 status=status.HTTP_400_BAD_REQUEST)
 
-            hotel_currency = room.hotel.province.country.currency
+            hotel_currency = room.hotel.city.province.country.currency
             exchange_rate = 1
             if currency != hotel_currency:
                 exchange_rate = get_exchange_rate(API_KEY_EXCHANGE_CURRENCY, hotel_currency, currency)
@@ -279,7 +279,7 @@ class BookingPriceView(APIView):
             currency = request.data.get('currency', 'USD')
 
             room = Room.objects.get(id=room_id)
-            hotel_currency = room.hotel.province.country.currency
+            hotel_currency = room.hotel.city.province.country.currency
             exchange_rate = 1
             if currency != hotel_currency:
                 exchange_rate = get_exchange_rate(API_KEY_EXCHANGE_CURRENCY, hotel_currency, currency)
