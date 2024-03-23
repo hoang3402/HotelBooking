@@ -547,6 +547,12 @@ class ElasticsearchView(APIView):
 
     def post(self, request):
         try:
+            keyword = request.data.get('keyword')
+            city = request.data.get('city')
+            country = request.data.get('country')
+            province = request.data.get('province')
+            numbers_adults = request.data.get('adults')
+            numbers_children = request.data.get('children')
             check_in_date = request.data.get('check_in_date')
             check_out_date = request.data.get('check_out_date')
 
@@ -555,20 +561,38 @@ class ElasticsearchView(APIView):
                 Q('range', booking_date={'gte': check_in_date, 'lte': check_out_date}),
             ])
 
-            booked_search = BookingDocument.search().query(booked_q).extra(size=1000)
-            # Thực thi truy vấn đã đặt
+            booked_search = (BookingDocument.search().query(booked_q)
+                             .source(includes=['room.id'])
+                             .extra(size=1000))
+
             booked_response = booked_search.execute()
             booked_ids = [hit.room.id for hit in booked_response]  # Lấy danh sách room.id
 
             # Tiếp theo, dùng danh sách booked_ids để loại trừ các phòng đã đặt
-            available_rooms_q = ~Q('ids', values=booked_ids) & Q('term', is_available=True)
-            available_rooms_search = RoomDocument.search().query(available_rooms_q).extra(size=1000)
+            available_rooms_q = (~Q('ids', values=booked_ids)
+                                 & Q('term', is_available=True)
+                                 & Q('range', adults={'gte': numbers_adults})
+                                 & Q('range', children={'gte': numbers_children}))
+
+            filters = [available_rooms_q]
+            if keyword:
+                filters.append(Q('multi_match', query=keyword, fields=['hotel.name', 'description']))
+            if city:
+                filters.append(Q('match', **{'hotel.city.code': city}))
+            if province:
+                filters.append(Q('match', **{'hotel.city.province.id': province}))
+            if country:
+                filters.append(Q('match', **{'hotel.city.province.country.code': country}))
+
+            final_query = Q('bool', must=filters)
+
+            available_rooms_search = RoomDocument.search().query(final_query).extra(size=1000)
 
             available_rooms_response = available_rooms_search.execute()
 
             hotel_ids = [hit.hotel.id for hit in available_rooms_response]
 
-            available_hotels_q = Q('ids', values=hotel_ids)
+            available_hotels_q = (Q('ids', values=hotel_ids))
             available_rooms_search = HotelDocument.search().query(available_hotels_q).extra(size=1000)
             available_rooms_response = available_rooms_search.execute()
 

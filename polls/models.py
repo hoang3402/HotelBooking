@@ -45,7 +45,7 @@ class Hotel(models.Model):
     email = models.EmailField()
     image = models.CharField(max_length=255)
 
-    province = models.ForeignKey(Province, on_delete=models.CASCADE, null=True, db_index=True)
+    city = models.ForeignKey(City, on_delete=models.CASCADE, null=True, db_index=True)
 
     features = models.ManyToManyField('polls.HotelFeatures', through='polls.SpecificHotelFeature')
 

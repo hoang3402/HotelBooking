@@ -10,21 +10,9 @@ class FeatureNameSerializer(serializers.ModelSerializer):
         fields = ['description']
 
 
-class CitySerializer(serializers.ModelSerializer):
-    class Meta:
-        model = City
-        fields = '__all__'
-
-
 class CountrySerializer(serializers.ModelSerializer):
     class Meta:
         model = Country
-        fields = '__all__'
-
-
-class CityDetailSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = City
         fields = '__all__'
 
 
@@ -33,6 +21,14 @@ class ProvinceSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Province
+        fields = '__all__'
+
+
+class CitySerializer(serializers.ModelSerializer):
+    province = ProvinceSerializer()
+
+    class Meta:
+        model = City
         fields = '__all__'
 
 
@@ -49,12 +45,13 @@ class RoomSerializer(serializers.ModelSerializer):
 
 
 class HotelSerializer(serializers.ModelSerializer):
-    province = ProvinceSerializer()
+    city = CitySerializer()
+
     # rooms = RoomSerializer(many=True)
 
     class Meta:
         model = Hotel
-        fields = ['id', 'name', 'phone_number', 'average_rating', 'email', 'image', 'province']
+        fields = ['id', 'name', 'phone_number', 'average_rating', 'email', 'image', 'city']
 
 
 class CreateHotelSerializer(serializers.ModelSerializer):
@@ -131,11 +128,11 @@ class DetailRoomSerializer(serializers.ModelSerializer):
 class DetailHotelSerializer(serializers.ModelSerializer):
     features = FeatureNameSerializer(many=True)
     room_set = DetailRoomSerializer(many=True)
-    province = ProvinceSerializer()
+    city = CitySerializer()
 
     class Meta:
         model = Hotel
-        fields = ['id', 'name', 'address', 'description', 'province', 'phone_number', 'average_rating', 'email',
+        fields = ['id', 'name', 'address', 'description', 'city', 'phone_number', 'average_rating', 'email',
                   'image', 'features', 'room_set']
 
 

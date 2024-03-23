@@ -6,15 +6,19 @@ from polls.models import Hotel, Room, Booking
 
 @registry.register_document
 class HotelDocument(Document):
-    province = fields.ObjectField(properties={
-        "id": fields.TextField(),
-        "slug": fields.TextField(),
+    city = fields.ObjectField(properties={
+        "code": fields.TextField(),
         "name": fields.TextField(),
-        "country": fields.ObjectField(properties={
-            "code": fields.TextField(),
+        "province": fields.ObjectField(properties={
+            "id": fields.TextField(),
+            "slug": fields.TextField(),
             "name": fields.TextField(),
-            "currency": fields.TextField(),
-        }),
+            "country": fields.ObjectField(properties={
+                "code": fields.TextField(),
+                "name": fields.TextField(),
+                "currency": fields.TextField(),
+            }),
+        })
     })
 
     class Index:
@@ -37,7 +41,6 @@ class HotelDocument(Document):
 
 @registry.register_document
 class RoomDocument(Document):
-
     hotel = fields.ObjectField(properties={
         "id": fields.TextField(),
         "name": fields.TextField(),
