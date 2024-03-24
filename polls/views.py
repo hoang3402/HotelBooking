@@ -558,7 +558,8 @@ class ElasticsearchView(APIView):
 
             # Đầu tiên, tìm room.id đã đặt
             booked_q = Q('bool', must=[
-                Q('range', booking_date={'gte': check_in_date, 'lte': check_out_date}),
+                Q('range', check_in_date={'lte': check_in_date}),
+                Q('range', check_out_date={'gte': check_out_date}),
             ])
 
             booked_search = (BookingDocument.search().query(booked_q)
@@ -570,30 +571,34 @@ class ElasticsearchView(APIView):
 
             # Tiếp theo, dùng danh sách booked_ids để loại trừ các phòng đã đặt
             available_rooms_q = (~Q('ids', values=booked_ids)
-                                 & Q('term', is_available=True)
+                                 & Q('match', is_available=True)
                                  & Q('range', adults={'gte': numbers_adults})
                                  & Q('range', children={'gte': numbers_children}))
 
-            filters = [available_rooms_q]
-            if keyword:
-                filters.append(Q('multi_match', query=keyword, fields=['hotel.name', 'description']))
-            if city:
-                filters.append(Q('match', **{'hotel.city.code': city}))
-            if province:
-                filters.append(Q('match', **{'hotel.city.province.id': province}))
-            if country:
-                filters.append(Q('match', **{'hotel.city.province.country.code': country}))
-
-            final_query = Q('bool', must=filters)
-
-            available_rooms_search = RoomDocument.search().query(final_query).extra(size=1000)
+            available_rooms_search = (RoomDocument.search()
+                                      .query(available_rooms_q)
+                                      .extra(size=1000))
 
             available_rooms_response = available_rooms_search.execute()
 
             hotel_ids = [hit.hotel.id for hit in available_rooms_response]
 
             available_hotels_q = (Q('ids', values=hotel_ids))
-            available_rooms_search = HotelDocument.search().query(available_hotels_q).extra(size=1000)
+            filters = [available_hotels_q]
+
+            if keyword:
+                filters.append(Q('multi_match', query=keyword, fields=['name', 'description']))
+            if city:
+                filters.append(Q('match', **{'city.code': city}))
+            if province:
+                filters.append(Q('match', **{'city.province.id': province}))
+            if country:
+                filters.append(Q('match', **{'city.province.country.code': country}))
+
+            final_query = Q('bool', must=filters)
+
+            available_rooms_search = HotelDocument.search().query(final_query).extra(size=1000)
+
             available_rooms_response = available_rooms_search.execute()
 
             paginator = CustomPagination()

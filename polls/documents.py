@@ -49,17 +49,7 @@ class RoomDocument(Document):
         "phone_number": fields.TextField(),
         "average_rating": fields.FloatField(),
         "email": fields.TextField(),
-        "image": fields.TextField(),
-        "province": fields.ObjectField(properties={
-            "id": fields.TextField(),
-            "slug": fields.TextField(),
-            "name": fields.TextField(),
-            "country": fields.ObjectField(properties={
-                "code": fields.TextField(),
-                "name": fields.TextField(),
-                "currency": fields.TextField(),
-            })
-        })
+        "image": fields.TextField()
     })
 
     class Index:
