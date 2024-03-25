@@ -4,3 +4,4 @@
 /HotelBooking/.env
 /polls/__pycache__
 /polls/auth/__pycache__
+/chatbot/__pycache__
