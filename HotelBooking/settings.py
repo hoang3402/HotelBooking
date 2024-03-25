@@ -33,7 +33,7 @@ API_KEY_EXCHANGE_CURRENCY = env('API_KEY_EXCHANGE_CURRENCY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = env('DEBUG')
 
-ALLOWED_HOSTS = ['localhost', 'hotel-tma.zeabur.app', '127.0.0.1', 'hotel-tma-fe.zeabur.app']
+ALLOWED_HOSTS = ['localhost', 'hotel-tma.zeabur.app', '127.0.0.1', 'hotel-tma-fe.zeabur.app', 'hoang3409.link']
 
 CORS_ORIGIN_ALLOW_ALL = False
 CORS_ORIGIN_WHITELIST = (
