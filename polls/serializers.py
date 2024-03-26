@@ -140,3 +140,12 @@ class ReviewSerializer(serializers.ModelSerializer):
     class Meta:
         model = Review
         fields = '__all__'
+
+
+class HotelFeaturesSerializer(serializers.ModelSerializer):
+    hotel = serializers.PrimaryKeyRelatedField(queryset=Hotel.objects.all())
+    feature = serializers.PrimaryKeyRelatedField(queryset=HotelFeatures.objects.all())
+
+    class Meta:
+        model = SpecificHotelFeature
+        fields = ['hotel', 'feature']

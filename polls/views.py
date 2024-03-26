@@ -32,6 +32,12 @@ class HotelViewSet(viewsets.ModelViewSet):
         serializer = CreateHotelSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         self.perform_create(serializer)
+
+        features = request.data.get('features')
+        if features is not None:
+            for feature in features:
+                SpecificHotelFeature.objects.update_or_create(hotel_id=kwargs['pk'], feature_id=feature['code'])
+
         headers = self.get_success_headers(serializer.data)
         return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
 
@@ -40,6 +46,17 @@ class HotelViewSet(viewsets.ModelViewSet):
         serializer = CreateHotelSerializer(instance, data=request.data, partial=True)
         serializer.is_valid(raise_exception=True)
         self.perform_update(serializer)
+
+        features = request.data.get('features')
+        if features is not None:
+            SpecificHotelFeature.objects.filter(hotel=instance).delete()
+
+            for feature in features:
+                SpecificHotelFeature.objects.update_or_create(
+                    hotel=instance,
+                    feature_id=feature['code'],
+                )
+
         headers = self.get_success_headers(serializer.data)
         return Response(serializer.data, status=status.HTTP_200_OK, headers=headers)
 

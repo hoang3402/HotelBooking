@@ -64,7 +64,7 @@ class UserLoginViewSet(APIView):
         except AuthenticationFailed as e:
             return response.Response({'error': str(e)}, status=status.HTTP_401_UNAUTHORIZED)
 
-        except Exception:
+        except Exception as e:
             return response.Response({'error': 'An internal error occurred.'},
                                      status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
