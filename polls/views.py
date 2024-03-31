@@ -14,7 +14,8 @@ from polls.documents import BookingDocument, RoomDocument, HotelDocument
 from polls.serializers import *
 from polls.utilities import calculate_total_cost, get_exchange_rate, days_available_of_room, is_room_available, \
     send_mail_confirmation, NoPagination, CustomPagination
-
+    
+import math
 
 # Hotel
 
@@ -529,10 +530,11 @@ class ExchangeRateView(APIView):
 
     def post(self, request):
         try:
-            amount = request.data.get('amount', 1)
+            amount = request.data.get('amount')
             from_currency = request.data.get('from_currency', 'USD')
             to_currency = request.data.get('to_currency', 'USD')
-            response = get_exchange_rate(API_KEY_EXCHANGE_CURRENCY, from_currency, to_currency, amount)
+            response = get_exchange_rate(API_KEY_EXCHANGE_CURRENCY, from_currency, to_currency)
+            response = math.ceil(float(amount) * response)
             return Response({"price": response}, status=status.HTTP_200_OK)
         except Exception as e:
             return Response({"detail": str(e)},
