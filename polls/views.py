@@ -16,6 +16,7 @@ from polls.utilities import calculate_total_cost, get_exchange_rate, days_availa
     send_mail_confirmation, NoPagination, CustomPagination
     
 import math
+import sys
 
 # Hotel
 
@@ -574,11 +575,13 @@ class ElasticsearchView(APIView):
             numbers_children = request.data.get('children')
             check_in_date = request.data.get('check_in_date')
             check_out_date = request.data.get('check_out_date')
+            price_floor = request.data.get('price_floor', 0)
+            price_ceiling = request.data.get('price_ceiling', sys.maxsize)
 
             # Đầu tiên, tìm room.id đã đặt
             booked_q = Q('bool', must=[
                 Q('range', check_in_date={'lte': check_in_date}),
-                Q('range', check_out_date={'gte': check_out_date}),
+                Q('range', check_out_date={'gte': check_out_date})
             ])
 
             booked_search = (BookingDocument.search().query(booked_q)
@@ -592,7 +595,9 @@ class ElasticsearchView(APIView):
             available_rooms_q = (~Q('ids', values=booked_ids)
                                  & Q('match', is_available=True)
                                  & Q('range', adults={'gte': numbers_adults})
-                                 & Q('range', children={'gte': numbers_children}))
+                                 & Q('range', children={'gte': numbers_children})
+                                 & Q('range', price={'gte': price_floor})
+                                 & Q('range', price={'lte': price_ceiling}))
 
             available_rooms_search = (RoomDocument.search()
                                       .query(available_rooms_q)
