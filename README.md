@@ -7,8 +7,7 @@
     - Có nhiều khách sạn trong hệ thống
     - Thông tin cơ bản về từng khách sạn, bao gồm tên, địa chỉ và giá cả theo loại phòng
   - [x] Tìm kiếm khách sạn
-    - Có thể tìm kiếm theo tiêu chí như địa điểm (tên phòng, thành phố, tỉnh...), ngày nhận phòng, ngày trả phòng,
-      và số lượng người.
+    - Có thể tìm kiếm theo tiêu chí như địa điểm (tên phòng, thành phố, tỉnh...), số tiền, ngày nhận phòng, ngày trả phòng, và số lượng người.
     - Người dùng xem được số lượng các khách sạn thoã mãn những tiêu chí nhất định
   - [x] Xem Chi tiết khách sạn
     - Khi người dùng chọn một khách sạn từ danh sách tìm kiếm, họ có thể xem thông tin chi tiết về từng khách sạn.
