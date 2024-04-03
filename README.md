@@ -39,12 +39,15 @@
 
 - [x] **Chức năng Tích hợp Thanh toán**:
 
-  - Cung cấp tích hợp đơn giản với cổng thanh toán để xử lý thanh toán cho đặt phòng.
+  - Tích hợp đơn giản với cổng thanh toán để xử lý thanh toán cho đặt phòng.
   - Kế hoạch sẽ sử dụng [VNPay](/docs/vnpay.md)
 
 - [x] **Chức năng Hỗ trợ Trực tuyến**:
   - Cung cấp chatbot để hỗ trợ người dùng về việc đặt phòng hoặc giải quyết sự cố.
 
+- [x] **Chức năng lưu hình ảnh**:
+  - Tích hợp đơn giản với hosting để xử lý lưu trữ hình ảnh
+  - [Document](/docs/image_hosting.md)
 ---
 
 # Setup docker
