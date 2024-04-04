@@ -61,6 +61,12 @@ Yêu cầu:
 
 ---
 
+# Back up database
+
+[Download](https://sd1j7-my.sharepoint.com/:f:/g/personal/admin_hoang3409_tk/Equ3_X2L5-pOsdmyixRhoJ0B6iQEoUiYFDyBPRt4V6Il1g?e=ldhq6R)
+
+---
+
 ## python
 
 Command make file requirements
